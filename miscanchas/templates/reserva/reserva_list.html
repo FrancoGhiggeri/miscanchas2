@@ -1,0 +1,195 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Reservas{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Reservas</h3>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<div class="alert alert-light alert-elevate" role="alert">
+		<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+		<div class="alert-text">
+			Estos son los pedidos de reservas, tenes que aceptar o cancelar los pedidos lo más rápido posible para que los jugadores sean notificados.
+		</div>
+	</div>
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__body">
+
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#" data-target="#pendientes">Pendientes</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#aceptadas">Aceptadas</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#canceladas">Canceladas por el establecimiento</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="pendientes" role="tabpanel">
+					<!--begin: Pendiente -->
+					<table class="table table-striped- table-bordered table-hover table-checkable display">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre y Apellido</th>
+								<th>Establecimiento</th>
+								<th>Cancha</th>
+								<th>Fecha</th>
+								<th>Horario</th>
+								<th>Seña pagada</th>
+								<th>Saldo</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if object_list %}
+								{% for reserva in object_list %} 
+								{% if reserva.pendiente and reserva.estado == "acreditada" %}
+								<tr>
+									<td>{{ reserva.id }}</td>
+									<td>{{ reserva.creador_de_reserva.nombre }} {{ reserva.creador_de_reserva.apellido }}</td>
+									<td>{{ reserva.cancha.establecimiento.nombre }}</td>
+									<td>{{ reserva.cancha.nombre }}</td>
+									<td>{{ reserva.fecha }}</td>
+									<td>{{ reserva.periodo }}</td>
+									<td>${{ reserva.deposito_reserva }}</td>
+									<td>${{ reserva.saldo }}</td>
+									<td>Pendiente</td>
+									<td><a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/aceptar">Aceptar</a> | <a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/cancelar">Cancelar</a></td>
+								</tr>
+								{% endif %}
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+					<!--end: Pendiente -->
+				</div>
+				<div class="tab-pane" id="aceptadas" role="tabpanel">
+					<!--begin: Confirmada -->
+					<table class="table table-striped- table-bordered table-hover table-checkable display">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre y Apellido</th>
+								<th>Establecimiento</th>
+								<th>Cancha</th>
+								<th>Fecha</th>
+								<th>Horario</th>
+								<th>Seña pagada</th>
+								<th>Saldo</th>
+								<th>Estado</th>
+								<th>¿Asistió?</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if object_list %}
+								{% for reserva in object_list %} 
+								{% if reserva.confirmada and reserva.estado == "acreditada" %}
+								<tr>
+									<td>{{ reserva.id }}</td>
+									<td>{{ reserva.creador_de_reserva.nombre }} {{ reserva.creador_de_reserva.apellido }}</td>
+									<td>{{ reserva.cancha.establecimiento.nombre }}</td>
+									<td>{{ reserva.cancha.nombre }}</td>
+									<td>{{ reserva.fecha }}</td>
+									<td>{{ reserva.periodo }}</td>
+									<td>${{ reserva.deposito_reserva }}</td>
+									<td>${{ reserva.saldo }}</td>
+									<td>Aceptada</td>
+									<td>{% if reserva.asistio %} Si {% else %} No {% endif %}</td>
+									<td><a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/update">Actualizar asistencia</a> | <a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/detail">Detalles</a> | <a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/cancelar">Cancelar</a></td>
+								</tr>
+								{% endif %}
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+					<!--end: Confirmada -->
+				</div>
+				<div class="tab-pane" id="canceladas" role="tabpanel">
+					<!--begin: Canceladas -->
+					<table class="table table-striped- table-bordered table-hover table-checkable display">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre y Apellido</th>
+								<th>Establecimiento</th>
+								<th>Cancha</th>
+								<th>Fecha</th>
+								<th>Horario</th>
+								<th>Seña pagada</th>
+								<th>Saldo</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if object_list %}
+								{% for reserva in object_list %} 
+								{% if reserva.cancelada and reserva.estado == "acreditada" %}
+								<tr>
+									<td>{{ reserva.id }}</td>
+									<td>{{ reserva.creador_de_reserva.nombre }} {{ reserva.creador_de_reserva.apellido }}</td>
+									<td>{{ reserva.cancha.establecimiento.nombre }}</td>
+									<td>{{ reserva.cancha.nombre }}</td>
+									<td>{{ reserva.fecha }}</td>
+									<td>{{ reserva.periodo }}</td>
+									<td>${{ reserva.deposito_reserva }}</td>
+									<td>${{ reserva.saldo }}</td>
+									<td>Cancelada</td>
+									<td>No disponible</td>
+								</tr>
+								{% endif %}
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+					<!--end: Canceladas -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- end:: Content -->
+
+<script type="text/javascript">
+    $('[name="reservas"]').addClass( "kt-menu__item--active kt-menu__item--open" );
+    $('[name="reservas_request"]').addClass( "kt-menu__item--active" );
+</script>
+
+<script>
+
+$(document).ready(function() {
+    $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+        $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+    } );
+     
+    $('table.display').DataTable( {
+		responsive: true,
+		order: [[ 0, "desc" ]],
+		language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+        }
+    } );
+});
+
+</script>
+
+{% endblock %}

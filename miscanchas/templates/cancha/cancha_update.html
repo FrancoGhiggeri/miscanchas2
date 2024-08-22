@@ -1,0 +1,453 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Editar cancha{% endblock %}
+
+{% block content %}
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Editar cancha</h3>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+
+<!--Begin::Dashboard 1-->
+
+<div class="col-lg-12">
+
+    <!--begin::Portlet-->
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Editar cancha
+                </h3>
+            </div>
+        </div>
+
+        <!--begin::Form-->
+        <form class="kt-form" id="" method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+            {% for hidden in canchaForm.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            <div class="kt-portlet__body">
+                <div class="kt-section kt-section--first">
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label>{{ canchaForm.nombre.label_tag }}</label>
+                            {{ canchaForm.nombre }}
+                            {{ canchaForm.nombre.errors.as_text }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label>{{ canchaForm.deporte.label_tag }}</label>
+                            {{ canchaForm.deporte }}
+                            {{ canchaForm.deporte.errors.as_text }}
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>{{ canchaForm.superficie.label_tag }}</label>
+                            {{ canchaForm.superficie }}
+                            {{ canchaForm.superficie.errors.as_text }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            {{ canchaForm.descripcion.label_tag }}
+                            {{ canchaForm.descripcion }}
+                            {{ canchaForm.descripcion.errors.as_text }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4 row">
+                            <label>Características:</label>
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.techada }} {{ canchaForm.techada.label_tag }}
+                                        {{ canchaForm.techada.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Días disponibles:</h5>
+                        </div>
+                        <div class="form-group col-md-8 row">
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.lunes }} {{ canchaForm.lunes.label_tag }}
+                                        {{ canchaForm.lunes.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-lunes">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_lunes.label_tag }}
+                                        {{ canchaForm.desde_lunes }}
+                                        {{ canchaForm.desde_lunes.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_lunes.label_tag }}
+                                        {{ canchaForm.hasta_lunes }}
+                                        {{ canchaForm.hasta_lunes.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.lunes_doble_turno }} Habilitar doble turno los lunes. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                </div>
+                                <div class="days-details-lunes-doble-turno">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_lunes_tarde.label_tag }}
+                                        {{ canchaForm.desde_lunes_tarde }}
+                                        {{ canchaForm.desde_lunes_tarde.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_lunes_tarde.label_tag }}
+                                        {{ canchaForm.hasta_lunes_tarde }}
+                                        {{ canchaForm.hasta_lunes_tarde.errors.as_text }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_lunes").val("{{ canchaForm.desde_lunes.value }}");
+                                $("#id_hasta_lunes").val("{{ canchaForm.hasta_lunes.value }}");
+                                $("#id_desde_lunes_tarde").val("{{ canchaForm.desde_lunes_tarde.value }}");
+                                $("#id_hasta_lunes_tarde").val("{{ canchaForm.hasta_lunes_tarde.value }}");
+                            </script>
+
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.martes }} {{ canchaForm.martes.label_tag }}
+                                        {{ canchaForm.martes.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-martes">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_martes.label_tag }}
+                                        {{ canchaForm.desde_martes }}
+                                        {{ canchaForm.desde_martes.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_martes.label_tag }}
+                                        {{ canchaForm.hasta_martes }}
+                                        {{ canchaForm.hasta_martes.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.martes_doble_turno }} Habilitar doble turno los martes. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                </div>
+                                <div class="days-details-martes-doble-turno">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_martes_tarde.label_tag }}
+                                        {{ canchaForm.desde_martes_tarde }}
+                                        {{ canchaForm.desde_martes_tarde.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_martes_tarde.label_tag }}
+                                        {{ canchaForm.hasta_martes_tarde }}
+                                        {{ canchaForm.hasta_martes_tarde.errors.as_text }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_martes").val("{{ canchaForm.desde_martes.value }}");
+                                $("#id_hasta_martes").val("{{ canchaForm.hasta_martes.value }}");
+                                $("#id_desde_martes_tarde").val("{{ canchaForm.desde_martes_tarde.value }}");
+                                $("#id_hasta_martes_tarde").val("{{ canchaForm.hasta_martes_tarde.value }}");
+                            </script>
+
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.miercoles }} {{ canchaForm.miercoles.label_tag }}
+                                        {{ canchaForm.miercoles.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-miercoles">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_miercoles.label_tag }}
+                                        {{ canchaForm.desde_miercoles }}
+                                        {{ canchaForm.desde_miercoles.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_miercoles.label_tag }}
+                                        {{ canchaForm.hasta_miercoles }}
+                                        {{ canchaForm.hasta_miercoles.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.miercoles_doble_turno }} Habilitar doble turno los miercoles. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                    <div class="days-details-miercoles-doble-turno">
+                                        <div class="form-group">
+                                            {{ canchaForm.desde_miercoles_tarde.label_tag }}
+                                            {{ canchaForm.desde_miercoles_tarde }}
+                                            {{ canchaForm.desde_miercoles_tarde.errors.as_text }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ canchaForm.hasta_miercoles_tarde.label_tag }}
+                                            {{ canchaForm.hasta_miercoles_tarde }}
+                                            {{ canchaForm.hasta_miercoles_tarde.errors.as_text }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_miercoles").val("{{ canchaForm.desde_miercoles.value }}");
+                                $("#id_hasta_miercoles").val("{{ canchaForm.hasta_miercoles.value }}");
+                                $("#id_desde_miercoles_tarde").val("{{ canchaForm.desde_miercoles_tarde.value }}");
+                                $("#id_hasta_miercoles_tarde").val("{{ canchaForm.hasta_miercoles_tarde.value }}");
+                            </script>
+
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.jueves }} {{ canchaForm.jueves.label_tag }}
+                                        {{ canchaForm.jueves.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-jueves">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_jueves.label_tag }}
+                                        {{ canchaForm.desde_jueves }}
+                                        {{ canchaForm.desde_jueves.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_jueves.label_tag }}
+                                        {{ canchaForm.hasta_jueves }}
+                                        {{ canchaForm.hasta_jueves.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.jueves_doble_turno }} Habilitar doble turno los jueves. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                    <div class="days-details-jueves-doble-turno">
+                                        <div class="form-group">
+                                            {{ canchaForm.desde_jueves_tarde.label_tag }}
+                                            {{ canchaForm.desde_jueves_tarde }}
+                                            {{ canchaForm.desde_jueves_tarde.errors.as_text }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ canchaForm.hasta_jueves_tarde.label_tag }}
+                                            {{ canchaForm.hasta_jueves_tarde }}
+                                            {{ canchaForm.hasta_jueves_tarde.errors.as_text }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_jueves").val("{{ canchaForm.desde_jueves.value }}");
+                                $("#id_hasta_jueves").val("{{ canchaForm.hasta_jueves.value }}");
+                                $("#id_desde_jueves_tarde").val("{{ canchaForm.desde_jueves_tarde.value }}");
+                                $("#id_hasta_jueves_tarde").val("{{ canchaForm.hasta_jueves_tarde.value }}");
+                            </script>
+
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.viernes }} {{ canchaForm.viernes.label_tag }}
+                                        {{ canchaForm.viernes.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-viernes">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_viernes.label_tag }}
+                                        {{ canchaForm.desde_viernes }}
+                                        {{ canchaForm.desde_viernes.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_viernes.label_tag }}
+                                        {{ canchaForm.hasta_viernes }}
+                                        {{ canchaForm.hasta_viernes.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.viernes_doble_turno }} Habilitar doble turno los viernes. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                    <div class="days-details-viernes-doble-turno">
+                                        <div class="form-group">
+                                            {{ canchaForm.desde_viernes_tarde.label_tag }}
+                                            {{ canchaForm.desde_viernes_tarde }}
+                                            {{ canchaForm.desde_viernes_tarde.errors.as_text }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ canchaForm.hasta_viernes_tarde.label_tag }}
+                                            {{ canchaForm.hasta_viernes_tarde }}
+                                            {{ canchaForm.hasta_viernes_tarde.errors.as_text }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_viernes").val("{{ canchaForm.desde_viernes.value }}");
+                                $("#id_hasta_viernes").val("{{ canchaForm.hasta_viernes.value }}");
+                                $("#id_desde_viernes_tarde").val("{{ canchaForm.desde_viernes_tarde.value }}");
+                                $("#id_hasta_viernes_tarde").val("{{ canchaForm.hasta_viernes_tarde.value }}");
+                            </script>
+
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.sabado }} {{ canchaForm.sabado.label_tag }}
+                                        {{ canchaForm.sabado.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-sabado">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_sabado.label_tag }}
+                                        {{ canchaForm.desde_sabado }}
+                                        {{ canchaForm.desde_sabado.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_sabado.label_tag }}
+                                        {{ canchaForm.hasta_sabado }}
+                                        {{ canchaForm.hasta_sabado.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.sabado_doble_turno }} Habilitar doble turno los sabado. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                    <div class="days-details-sabado-doble-turno">
+                                        <div class="form-group">
+                                            {{ canchaForm.desde_sabado_tarde.label_tag }}
+                                            {{ canchaForm.desde_sabado_tarde }}
+                                            {{ canchaForm.desde_sabado_tarde.errors.as_text }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ canchaForm.hasta_sabado_tarde.label_tag }}
+                                            {{ canchaForm.hasta_sabado_tarde }}
+                                            {{ canchaForm.hasta_sabado_tarde.errors.as_text }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_sabado").val("{{ canchaForm.desde_sabado.value }}");
+                                $("#id_hasta_sabado").val("{{ canchaForm.hasta_sabado.value }}");
+                                $("#id_desde_sabado_tarde").val("{{ canchaForm.desde_sabado_tarde.value }}");
+                                $("#id_hasta_sabado_tarde").val("{{ canchaForm.hasta_sabado_tarde.value }}");
+                            </script>
+
+                            <div class="col-12">
+                                <div class="kt-checkbox-list">
+                                    <label class="kt-checkbox">
+                                        {{ canchaForm.domingo }} {{ canchaForm.domingo.label_tag }}
+                                        {{ canchaForm.domingo.errors.as_text }}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="days-details-domingo">
+                                    <div class="form-group">
+                                        {{ canchaForm.desde_domingo.label_tag }}
+                                        {{ canchaForm.desde_domingo }}
+                                        {{ canchaForm.desde_domingo.errors.as_text }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ canchaForm.hasta_domingo.label_tag }}
+                                        {{ canchaForm.hasta_domingo }}
+                                        {{ canchaForm.hasta_domingo.errors.as_text }}
+                                    </div>
+                                    <div class="kt-checkbox-list">
+                                        <p>{{ canchaForm.domingo_doble_turno }} Habilitar doble turno los domingo. <small>Habilita esta opción si esta cancha trabaja con doble turno (luego puedes modificarla).</small></p>
+                                    </div>
+                                    <div class="days-details-domingo-doble-turno">
+                                        <div class="form-group">
+                                            {{ canchaForm.desde_domingo_tarde.label_tag }}
+                                            {{ canchaForm.desde_domingo_tarde }}
+                                            {{ canchaForm.desde_domingo_tarde.errors.as_text }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ canchaForm.hasta_domingo_tarde.label_tag }}
+                                            {{ canchaForm.hasta_domingo_tarde }}
+                                            {{ canchaForm.hasta_domingo_tarde.errors.as_text }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $("#id_desde_domingo").val("{{ canchaForm.desde_domingo.value }}");
+                                $("#id_hasta_domingo").val("{{ canchaForm.hasta_domingo.value }}");
+                                $("#id_desde_domingo_tarde").val("{{ canchaForm.desde_domingo_tarde.value }}");
+                                $("#id_hasta_domingo_tarde").val("{{ canchaForm.hasta_domingo_tarde.value }}");
+                            </script>
+                            
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Precios:</h5>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>{{ canchaForm.precio_sin_luz.label_tag }}</label>
+                            {{ canchaForm.precio_sin_luz }}
+                            {{ canchaForm.precio_sin_luz.errors.as_text }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>{{ canchaForm.precio_con_luz.label_tag }}</label>
+                            {{ canchaForm.precio_con_luz }}
+                            {{ canchaForm.precio_con_luz.errors.as_text }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Imágenes:</h5>
+                            <p>Agrega las imágenes de la canchaForm...</p>
+                        </div>
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            <div class="form-group col-md-4">
+                                <label>{{ canchaForm.label_tag }}</label>
+                                {{ form }}
+                                {{ canchaForm.errors.as_text }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <button type="submit" class="btn btn-primary">Continuar</button>
+                    <button type="reset" class="btn btn-secondary">Cancelar</button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+ </div>
+
+<script type="text/javascript">
+    $('[name="canchas"]').addClass( "kt-menu__item--active kt-menu__item--open" );
+</script>
+{% load static %}
+<script src="{% static 'back/js/sup-options.js' %}"></script>
+
+{% endblock %}

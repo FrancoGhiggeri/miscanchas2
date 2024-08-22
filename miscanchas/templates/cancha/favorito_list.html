@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load static %}
+	<main>
+		
+		<section class="hero_in tours">
+			<div class="wrapper">
+				<div class="container">
+					<h1 class="fadeInUp"><span></span>Mis favoritos</h1>
+				</div>
+			</div>
+		</section>
+		<!--/hero_in-->
+
+		<div class="container margin_60_35">
+			
+		<div class="wrapper-grid">
+			<div class="row">
+				{% if object_list %}
+				{% for favorito in object_list %}
+				<div class="col-xl-4 col-lg-6 col-md-6">
+					<div class="box_grid">
+						<figure>
+							<a href="{{SITE_ROOT}}/favoritos/{{favorito.id}}/delete" class="wish_bt liked"></a>
+							<a href="{{SITE_ROOT}}/establecimiento/{{favorito.cancha.establecimiento.id}}/cancha/{{favorito.cancha.id}}/detail">
+                            {% for image in favorito.cancha.imagescancha_set.all %}
+                                {% if image.image %}
+                                    <img src="{{SITE_ROOT}}/media/{{ image.image }}" class="img-fluid" alt="" width="800" height="533">
+                                {% endif %}
+                            {% endfor %}
+							<small>{{favorito.cancha.deporte}} | {{favorito.cancha.superficie}}</small>
+							<div class="read_more"><span>Ver más</span></div></a>
+						</figure>
+						<div class="wrapper">
+							<h3><a href="#">{{favorito.cancha.nombre}}</a></h3>
+							<p>{{favorito.cancha.descripcion}}</p>
+							<span class="price">Desde <strong>${{favorito.cancha.precio_sin_luz}}</strong> por hora</span>
+						</div>
+<!-- 						<ul>
+							<li><i class="icon_clock_alt"></i> 1h 30min</li>
+							<li><div class="score"><span>Superb<em>350 Reviews</em></span><strong>8.9</strong></div></li>
+						</ul> -->
+					</div>
+				</div>
+				<!-- /box_grid -->
+				{% endfor %}
+				{% endif %}
+			</div>
+			<!-- /row -->
+			</div>
+			<!-- /isotope-wrapper -->
+						
+		</div>
+		<!-- /container -->
+	</main>
+	<!--/main-->
+{% endblock %}

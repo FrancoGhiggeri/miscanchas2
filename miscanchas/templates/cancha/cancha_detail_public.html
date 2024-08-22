@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}Detalle de cancha{% endblock %}
+
+{% block content %}
+
+    <main>
+        <section class="hero_in hotels_detail">
+            <div class="wrapper">
+                <div class="container">
+                    <h1 class="fadeInUp"><span></span>Cancha de {{ cancha.deporte }} de {{ cancha.superficie }} en {{cancha.establecimiento}}</h1>
+                </div>
+            </div>
+        </section>
+        <!--/hero_in-->
+
+        <div class="bg_color_1">
+            <div class="container margin_60_35">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <section id="description">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Descripción</h3>
+                                    <p>{{cancha.descripcion}}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 mb-2">
+                                    <h4>Características</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <ul class="bullets">
+                                        <li>Tenchada: {% if cancha.techada %} <i class="ti-check"></i> {% else %} <i class="ti-close"></i> {% endif %}</li>
+                                    </ul>
+                                    <p class="mt-1"><a href="{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/detail"><i class="icon-search"></i> Detalles del establecimiento</a></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 mb-2">
+                                    <h4>Imágenes</h4>
+                                </div>
+                                {% for image in cancha.imagescancha_set.all %}
+                                    <div class="small-demo">
+                                    {% if image.image %}
+                                        <a href="{{SITE_ROOT}}/media/{{ image.image }}"><img src="{{SITE_ROOT}}/media/{{ image.image }}" alt="" class="col-md-6" /></a>
+                                        <div class="clearing"></div>
+                                        <div class="caption"></div>
+                                    {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- /row -->
+                        </section>
+                        <!-- /section -->
+                    </div>
+                    <!-- /col -->
+                    
+                    <aside class="col-lg-4" id="sidebar">
+                        <div class="box_detail booking">
+                            <div class="price">
+                                <h3 class="mt-0">Precio</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span id="precio_sin_luz_c_comision" style="font-size: 30px;"></span> <br><small>sin luz</small>
+                                    </div>
+                                    {% if cancha.precio_con_luz %}
+                                    <div class="col-md-6">
+                                        <span id="precio_con_luz_c_comision" style="font-size: 30px;"></span> <br><small>con luz</small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <script type="text/javascript">
+                                    // calculate precio_sin_luz with comision
+                                    var precio_sin_luz_c_comision = (({{cancha.precio_sin_luz}} * comision) + {{cancha.precio_sin_luz}});
+                                    $('#precio_sin_luz_c_comision').text("$" + precio_sin_luz_c_comision);
+                                    {% if cancha.precio_con_luz %}
+                                        // calculate precio_con_luz with comision
+                                        var precio_con_luz_c_comision = (({{cancha.precio_con_luz}} * comision) + {{cancha.precio_con_luz}});
+                                        $('#precio_con_luz_c_comision').text("$" + precio_con_luz_c_comision);
+                                    {% endif %}
+                                </script>
+                            </div>
+                            <a href="{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{cancha.id}}/reservar" class=" add_top_30 btn_1 full-width purchase">Reservar</a>
+                            <a href="{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{cancha.id}}/add_favorite" class="btn_1 full-width outline wishlist"><i class="icon_heart"></i> Agregar a favoritos</a>
+                            <div class="text-center"><small>Más adelante necesitarás una tarjeta de crédito/débito para señar la cancha vía MercadoPago, solo pagarás el 6% del total que luego se te descuenta de tu pago en el lugar.</small></div>
+                        </div>
+                        <ul class="share-buttons">
+                            <li><a class="fb-share" href="#"><i class="social_facebook"></i> Compartir</a></li>
+                            <li><a class="twitter-share" href="#0"><i class="social_twitter"></i> Tweet</a></li>
+                        </ul>
+                    </aside>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /bg_color_1 -->
+    </main>
+    <!--/main-->
+
+<script type="text/javascript">
+$( document ).ready(function() {
+  // Handler for .ready() called.
+  var $gallery = new SimpleLightbox('.small-demo a', {});
+});
+</script>
+
+{% endblock %}

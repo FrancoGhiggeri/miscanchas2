@@ -1,0 +1,16 @@
+/*============================================================================================*/
+/* Your custom styles below */
+/*============================================================================================*/
+
+.top_menu i {
+	font-size: 25px;
+    color: #fff;
+}
+
+.home-search {
+    background: #0d100aa1;
+    padding: 25px;
+    border-radius: 5px;
+    margin-top: 15px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);;
+}

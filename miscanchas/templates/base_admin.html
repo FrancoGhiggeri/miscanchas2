@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 4 & Angular 8
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<html lang="es">
+
+	<!-- begin::Head -->
+	<head>
+
+		<!--begin::Base Path (base relative path for assets of this page) -->
+		<base href="../">
+
+		<!--end::Base Path -->
+		<meta charset="utf-8" />
+		<title>MisCanchas | {% block title %}{% endblock %}</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!--begin::Fonts -->
+		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+		<script>
+			WebFont.load({
+				google: {
+					"families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]
+				},
+				active: function() {
+					sessionStorage.fonts = true;
+				}
+			});
+		</script>
+
+		<!--end::Fonts -->
+		{% load static %}
+
+		<!--begin::Page Vendors Styles(used by this page) -->
+		<link href="{% static 'back/vendors/custom/fullcalendar/fullcalendar.bundle.css' %}" rel="stylesheet" type="text/css" />
+
+		<!--end::Page Vendors Styles -->
+
+		<!--begin:: Global Mandatory Vendors -->
+		<link href="{% static 'back/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet" type="text/css" />
+
+		<!--end:: Global Mandatory Vendors -->
+
+		<!--begin:: Global Optional Vendors -->
+		<link href="{% static 'back/vendors/general/tether/dist/css/tether.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-timepicker/css/bootstrap-timepicker.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-select/dist/css/bootstrap-select.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/select2/dist/css/select2.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/ion-rangeslider/css/ion.rangeSlider.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/nouislider/distribute/nouislider.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/owl.carousel/dist/assets/owl.carousel.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/owl.carousel/dist/assets/owl.theme.default.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/dropzone/dist/dropzone.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/summernote/dist/summernote.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/bootstrap-markdown/css/bootstrap-markdown.min.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/animate.css/animate.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/toastr/build/toastr.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/morris.js/morris.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/sweetalert2/dist/sweetalert2.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/socicon/css/socicon.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/custom/vendors/line-awesome/css/line-awesome.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/custom/vendors/flaticon/flaticon.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/custom/vendors/flaticon2/flaticon.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/vendors/general/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
+
+		<!--end:: Global Optional Vendors -->
+
+		<!--begin::Global Theme Styles(used by all pages) -->
+		<link href="{% static 'back/css/demo1/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+
+		<!--end::Global Theme Styles -->
+
+		<!--begin::Page Vendors Styles(used by this page) -->
+		<link href="{% static 'back/vendors/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+
+		<!--begin::Layout Skins(used by all pages) -->
+		<link href="{% static 'back/css/demo1/skins/header/base/light.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/css/demo1/skins/header/menu/light.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/css/demo1/skins/brand/dark.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'back/css/demo1/skins/aside/dark.css' %}" rel="stylesheet" type="text/css" />
+
+		<!--end::Layout Skins -->
+	    <link rel="icon" href="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png" sizes="32x32">
+	    <link rel="icon" href="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png" sizes="192x192">
+	    <link rel="apple-touch-icon" href="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png"><meta name="msapplication-TileImage" content="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png">
+
+		<!--begin:: Global Mandatory Vendors -->
+		<script src="{% static 'back/vendors/general/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap/dist/js/bootstrap.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/js-cookie/src/js.cookie.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/moment/min/moment.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/tooltip.js/dist/umd/tooltip.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/perfect-scrollbar/dist/perfect-scrollbar.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/sticky-js/dist/sticky.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/wnumb/wNumb.js' %}" type="text/javascript"></script>
+
+	</head>
+
+	<!-- end::Head -->
+
+	<!-- begin::Body -->
+	<body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
+
+		<!-- begin:: Page -->
+
+		<!-- begin:: Header Mobile -->
+		<div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
+			<div class="kt-header-mobile__logo">
+				<a href="{{SITE_ROOT}}/backoffice/home">
+					<img alt="Logo" src="{% static 'back/media/logos/logo-miscanchas-invert.png' %}" />
+				</a>
+			</div>
+			<div class="kt-header-mobile__toolbar">
+				<button class="kt-header-mobile__toggler kt-header-mobile__toggler--left" id="kt_aside_mobile_toggler"><span></span></button>
+				<!-- <button class="kt-header-mobile__toggler" id="kt_header_mobile_toggler"><span></span></button> -->
+				<!-- <button class="kt-header-mobile__topbar-toggler" id="kt_header_mobile_topbar_toggler"><i class="flaticon-more"></i></button> -->
+			</div>
+		</div>
+
+		<!-- end:: Header Mobile -->
+		<div class="kt-grid kt-grid--hor kt-grid--root">
+			<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+
+				<!-- begin:: Aside -->
+				<button class="kt-aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button>
+				<div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside">
+
+					<!-- begin:: Aside -->
+					<div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
+						<div class="kt-aside__brand-logo">
+							<a href="{{SITE_ROOT}}/backoffice/home">
+								<img alt="Logo" src="{% static 'back/media/logos/logo-miscanchas-invert.png' %}" />
+							</a>
+						</div>
+						<div class="kt-aside__brand-tools">
+							<button class="kt-aside__brand-aside-toggler" id="kt_aside_toggler">
+								<span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+										<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<polygon id="Shape" points="0 0 24 0 24 24 0 24" />
+											<path d="M5.29288961,6.70710318 C4.90236532,6.31657888 4.90236532,5.68341391 5.29288961,5.29288961 C5.68341391,4.90236532 6.31657888,4.90236532 6.70710318,5.29288961 L12.7071032,11.2928896 C13.0856821,11.6714686 13.0989277,12.281055 12.7371505,12.675721 L7.23715054,18.675721 C6.86395813,19.08284 6.23139076,19.1103429 5.82427177,18.7371505 C5.41715278,18.3639581 5.38964985,17.7313908 5.76284226,17.3242718 L10.6158586,12.0300721 L5.29288961,6.70710318 Z" id="Path-94" fill="#000000" fill-rule="nonzero" transform="translate(8.999997, 11.999999) scale(-1, 1) translate(-8.999997, -11.999999) " />
+											<path d="M10.7071009,15.7071068 C10.3165766,16.0976311 9.68341162,16.0976311 9.29288733,15.7071068 C8.90236304,15.3165825 8.90236304,14.6834175 9.29288733,14.2928932 L15.2928873,8.29289322 C15.6714663,7.91431428 16.2810527,7.90106866 16.6757187,8.26284586 L22.6757187,13.7628459 C23.0828377,14.1360383 23.1103407,14.7686056 22.7371482,15.1757246 C22.3639558,15.5828436 21.7313885,15.6103465 21.3242695,15.2371541 L16.0300699,10.3841378 L10.7071009,15.7071068 Z" id="Path-94" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(15.999997, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-15.999997, -11.999999) " />
+										</g>
+									</svg></span>
+								<span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+										<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<polygon id="Shape" points="0 0 24 0 24 24 0 24" />
+											<path d="M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z" id="Path-94" fill="#000000" fill-rule="nonzero" />
+											<path d="M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z" id="Path-94" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) " />
+										</g>
+									</svg></span>
+							</button>
+
+							<!--
+			<button class="kt-aside__brand-aside-toggler kt-aside__brand-aside-toggler--left" id="kt_aside_toggler"><span></span></button>
+			-->
+						</div>
+					</div>
+
+					<!-- end:: Aside -->
+
+					<!-- begin:: Aside Menu -->
+					<div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
+						<div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
+							<ul class="kt-menu__nav ">
+								<li class="kt-menu__item" name="inicio" aria-haspopup="true"><a href="{{SITE_ROOT}}/backoffice/home" class="kt-menu__link "><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+								<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									<polygon id="Bound" points="0 0 24 0 24 24 0 24" />
+									<path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" id="Shape" fill="#000000" fill-rule="nonzero" />
+									<path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" id="Path" fill="#000000" opacity="0.3" />
+								</g></svg></span>
+								<span class="kt-menu__link-text">Inicio</span></a>
+								</li>
+
+								{% if user.dueno %}
+								
+								<li class="kt-menu__item  kt-menu__item--submenu" name="establecimientos" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+									    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									        <rect id="bound" x="0" y="0" width="24" height="24"/>
+									        <path d="M12,21 C7.02943725,21 3,16.9705627 3,12 C3,7.02943725 7.02943725,3 12,3 C16.9705627,3 21,7.02943725 21,12 C21,16.9705627 16.9705627,21 12,21 Z M14.1654881,7.35483745 L9.61055177,10.3622525 C9.47921741,10.4489666 9.39637436,10.592455 9.38694497,10.7495509 L9.05991526,16.197949 C9.04337012,16.4735952 9.25341309,16.7104632 9.52905936,16.7270083 C9.63705011,16.7334903 9.74423017,16.7047714 9.83451193,16.6451626 L14.3894482,13.6377475 C14.5207826,13.5510334 14.6036256,13.407545 14.613055,13.2504491 L14.9400847,7.80205104 C14.9566299,7.52640477 14.7465869,7.28953682 14.4709406,7.27299168 C14.3629499,7.26650974 14.2557698,7.29522855 14.1654881,7.35483745 Z" id="Combined-Shape" fill="#000000"/>
+									    </g>
+									</svg></span><span class="kt-menu__link-text">Establecimientos</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+									<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+										<ul class="kt-menu__subnav">
+											<!-- <li class="kt-menu__item" name="agregar_establecimiento" aria-haspopup="true"><a href="{{ SITE_ROOT }}/backoffice/establecimiento/new/" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Agregar establecimiento</span></a></li> -->
+											<li class="kt-menu__item" name="mis_establecimientos" aria-haspopup="true"><a href="{{ SITE_ROOT }}/backoffice/establecimiento/list/" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Mis establecimientos</span></a></li>
+										</ul>
+									</div>
+								</li>
+
+								<li class="kt-menu__item  kt-menu__item--submenu" name="canchas" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+								<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									<polygon id="Bound" points="0 0 24 0 24 24 0 24" />
+									<path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" id="Shape" fill="#000000" fill-rule="nonzero" />
+									<path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" id="Path" fill="#000000" opacity="0.3" />
+								</g></svg></span><span class="kt-menu__link-text">Canchas</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+									<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+										<ul class="kt-menu__subnav">
+											<!-- <li class="kt-menu__item" name="agregar_cancha" aria-haspopup="true"><a href="{{ SITE_ROOT }}/backoffice/canchas/new/" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Agregar cancha</span></a></li> -->
+											<li class="kt-menu__item" name="mis_canchas" aria-haspopup="true"><a href="{{ SITE_ROOT }}/backoffice/canchas/list/" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Mis canchas</span></a></li>
+										</ul>
+									</div>
+								</li>
+
+								<li class="kt-menu__item  kt-menu__item--submenu" name="empleados" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+									    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									        <polygon id="Shape" points="0 0 24 0 24 24 0 24"/>
+									        <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+									        <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" id="Mask-Copy" fill="#000000" fill-rule="nonzero"/>
+									    </g>
+									</svg></span><span class="kt-menu__link-text">Empleados</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+									<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+										<ul class="kt-menu__subnav">
+											<!-- <li class="kt-menu__item" name="agregar_empleado" aria-haspopup="true"><a href="{{SITE_ROOT}}/owner/new_employee/" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Agregar empleado</span></a></li> -->
+											<li class="kt-menu__item" name="lista_empleados" aria-haspopup="true"><a href="{{SITE_ROOT}}/owner/employee/list/" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Lista de empleados</span></a></li>
+										</ul>
+									</div>
+								</li>
+
+								<li class="kt-menu__item  kt-menu__item--submenu" name="facturacion" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+									    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									        <rect id="bound" x="0" y="0" width="24" height="24"/>
+									        <polygon id="Rectangle" fill="#000000" opacity="0.3" points="6 3 18 3 20 6.5 4 6.5"/>
+									        <path d="M6,5 L18,5 C19.1045695,5 20,5.8954305 20,7 L20,19 C20,20.1045695 19.1045695,21 18,21 L6,21 C4.8954305,21 4,20.1045695 4,19 L4,7 C4,5.8954305 4.8954305,5 6,5 Z M9,9 C8.44771525,9 8,9.44771525 8,10 C8,10.5522847 8.44771525,11 9,11 L15,11 C15.5522847,11 16,10.5522847 16,10 C16,9.44771525 15.5522847,9 15,9 L9,9 Z" id="Combined-Shape" fill="#000000"/>
+									    </g>
+									</svg></span><span class="kt-menu__link-text">Facturación</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+									<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+										<ul class="kt-menu__subnav">
+											<li class="kt-menu__item" name="facturacion_list" aria-haspopup="true"><a href="{{SITE_ROOT}}/backoffice/facturacion_list" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Datos de facturación</span></a></li>
+										</ul>
+									</div>
+								</li>
+
+								{% endif %}
+
+								{% if user.dueno or user.empleado %}
+								<li class="kt-menu__item  kt-menu__item--submenu" name="reservas" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+									    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									        <path d="M17,12 L18.5,12 C19.3284271,12 20,12.6715729 20,13.5 C20,14.3284271 19.3284271,15 18.5,15 L5.5,15 C4.67157288,15 4,14.3284271 4,13.5 C4,12.6715729 4.67157288,12 5.5,12 L7,12 L7.5582739,6.97553494 C7.80974924,4.71225688 9.72279394,3 12,3 C14.2772061,3 16.1902508,4.71225688 16.4417261,6.97553494 L17,12 Z" id="Combined-Shape" fill="#000000"/>
+									        <rect id="Rectangle-23" fill="#000000" opacity="0.3" x="10" y="16" width="4" height="4" rx="2"/>
+									    </g>
+									</svg></span><span class="kt-menu__link-text">Reservas</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+									<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+										<ul class="kt-menu__subnav">
+											
+											<li class="kt-menu__item" name="reservas_request" aria-haspopup="true"><a href="{{SITE_ROOT}}/backoffice/reservas/list" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pedidos de reservas</span></a></li>
+
+											<li class="kt-menu__item " name="reservas_calendar" aria-haspopup="true"><a href="{{SITE_ROOT}}/backoffice/reservas/calendar" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Calendario de Reservas</span></a></li>
+
+											<li class="kt-menu__item " name="cancelaciones_usuarios" aria-haspopup="true"><a href="{{SITE_ROOT}}/backoffice/cancelaciones" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Cancelaciones de usuarios</span></a></li>
+										</ul>
+									</div>
+								</li>
+								{% endif %}
+
+								<li class="kt-menu__item" aria-haspopup="true"><a href="http://soporte.miscanchas.com/" class="kt-menu__link ">
+									<span class="kt-menu__link-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+										    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+										        <rect id="bound" x="0" y="0" width="24" height="24"/>
+										        <circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>
+										        <path d="M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M10.591,14.868 L10.591,13.209 L11.851,13.209 C13.447,13.209 14.602,11.991 14.602,10.395 C14.602,8.799 13.447,7.581 11.851,7.581 C10.234,7.581 9.121,8.799 9.121,10.395 L7.336,10.395 C7.336,7.875 9.31,5.922 11.851,5.922 C14.392,5.922 16.387,7.875 16.387,10.395 C16.387,12.915 14.392,14.868 11.851,14.868 L10.591,14.868 Z" id="Combined-Shape" fill="#000000"/>
+										    </g>
+										</svg>
+									</span>
+									<span class="kt-menu__link-text">Soporte</span></a>
+								</li>
+
+								<li class="kt-menu__item" aria-haspopup="true"><a href="{{SITE_ROOT}}/logout/" class="kt-menu__link "><span class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+								    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								        <rect id="bound" x="0" y="0" width="24" height="24"/>
+								        <path d="M7.62302337,5.30262097 C8.08508802,5.000107 8.70490146,5.12944838 9.00741543,5.59151303 C9.3099294,6.05357769 9.18058801,6.67339112 8.71852336,6.97590509 C7.03468892,8.07831239 6,9.95030239 6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,9.99549229 17.0108275,8.15969002 15.3875704,7.04698597 C14.9320347,6.73472706 14.8158858,6.11230651 15.1281448,5.65677076 C15.4404037,5.20123501 16.0628242,5.08508618 16.51836,5.39734508 C18.6800181,6.87911023 20,9.32886071 20,12 C20,16.418278 16.418278,20 12,20 C7.581722,20 4,16.418278 4,12 C4,9.26852332 5.38056879,6.77075716 7.62302337,5.30262097 Z" id="Oval-25" fill="#000000" fill-rule="nonzero"/>
+								        <rect id="Rectangle" fill="#000000" opacity="0.3" x="11" y="3" width="2" height="10" rx="1"/>
+								    </g>
+								</svg></span>
+								<span class="kt-menu__link-text">Cerrar sesión</span></a>
+								</li>
+							</ul>
+						</div>
+					</div></div>
+
+					<!-- end:: Aside Menu -->
+				</div>
+
+				<!-- end:: Aside -->
+				<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+
+					<!-- begin:: Header -->
+					<div id="kt_header" class="kt-header kt-grid__item  kt-header--fixed ">
+
+						<!-- begin:: Header Menu -->
+						<button class="kt-header-menu-wrapper-close" id="kt_header_menu_mobile_close_btn"><i class="la la-close"></i></button>
+						<div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
+							<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-default ">
+							</div>
+						</div>
+
+						<!-- end:: Header Menu -->
+
+						<!-- begin:: Header Topbar -->
+						<div class="kt-header__topbar">
+
+							<!--begin: User Bar -->
+							<div class="kt-header__topbar-item kt-header__topbar-item--user">
+								<div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="0px,0px">
+									<div class="kt-header__topbar-user">
+										<span class="kt-header__topbar-welcome kt-hidden-mobile">Hola,</span>
+										<span class="kt-header__topbar-username kt-hidden-mobile">{{ user }}</span>
+										<!-- <img class="kt-hidden" alt="Pic" src="{% static '/media/users/300_25.jpg" /> -->
+
+										<!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
+										<!-- <span class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold">S</span> -->
+									</div>
+								</div>
+								<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl">
+
+									<!--begin: Head -->
+									<div class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x" style="background-image: url(http://127.0.0.1:8000/back/media/misc/bg-1.jpg)">
+										<div class="kt-user-card__avatar">
+											<!-- <img class="kt-hidden" alt="Pic" src="{% static '/media/users/300_25.jpg" /> -->
+
+											<!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
+											<!-- <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">S</span> -->
+										</div>
+										<div class="kt-user-card__name" style="color: #6c7293;">
+											{{ user }}
+										</div>
+<!-- 										<div class="kt-user-card__badge">
+											<span class="btn btn-success btn-sm btn-bold btn-font-md">23 messages</span>
+										</div> -->
+									</div>
+
+									<!--end: Head -->
+
+									<!--begin: Navigation -->
+									<div class="kt-notification">
+										<div class="kt-notification__custom kt-space-between">
+											<a href="{{ SITE_ROOT }}/logout/" class="btn btn-label btn-label-brand btn-sm btn-bold">Cerrar sesión</a>
+										</div>
+									</div>
+
+									<!--end: Navigation -->
+								</div>
+							</div>
+
+							<!--end: User Bar -->
+						</div>
+
+						<!-- end:: Header Topbar -->
+					</div>
+
+					<!-- end:: Header -->
+					<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+
+							{% block content %}
+    						{% endblock %}
+
+							<!--End::Dashboard 1-->
+						</div>
+
+						<!-- end:: Content -->
+					</div>
+
+					<!-- begin:: Footer -->
+					<div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop" id="kt_footer">
+						<div class="kt-container  kt-container--fluid ">
+							<div class="kt-footer__copyright">
+								2021&nbsp;&copy;&nbsp;<a href="#" target="_blank" class="kt-link">MisCanchas</a>
+							</div>
+							<div class="kt-footer__menu">
+								<a href="http://soporte.miscanchas.com/" class="kt-footer__menu-link kt-link">Soporte</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- end:: Footer -->
+				</div>
+			</div>
+		</div>
+
+		<!-- begin::Global Config(global config for global JS sciprts) -->
+		<script>
+			var KTAppOptions = {
+				"colors": {
+					"state": {
+						"brand": "#5d78ff",
+						"dark": "#282a3c",
+						"light": "#ffffff",
+						"primary": "#5867dd",
+						"success": "#34bfa3",
+						"info": "#36a3f7",
+						"warning": "#ffb822",
+						"danger": "#fd3995"
+					},
+					"base": {
+						"label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
+						"shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"]
+					}
+				}
+			};
+		</script>
+
+		<!-- end::Global Config -->
+
+		<!--end:: Global Mandatory Vendors -->
+
+		<!--begin:: Global Optional Vendors -->
+		<script src="{% static 'back/vendors/general/jquery-form/dist/jquery.form.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/block-ui/jquery.blockUI.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/bootstrap-datepicker.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-datetime-picker/js/bootstrap-datetimepicker.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/bootstrap-timepicker.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-daterangepicker/daterangepicker.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/vendors/bootstrap-multiselectsplitter/bootstrap-multiselectsplitter.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-select/dist/js/bootstrap-select.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-switch/dist/js/bootstrap-switch.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/bootstrap-switch.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/select2/dist/js/select2.full.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/ion-rangeslider/js/ion.rangeSlider.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/typeahead.js/dist/typeahead.bundle.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/handlebars/dist/handlebars.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/inputmask/dist/jquery.inputmask.bundle.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/nouislider/distribute/nouislider.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/owl.carousel/dist/owl.carousel.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/autosize/dist/autosize.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/clipboard/dist/clipboard.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/dropzone/dist/dropzone.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/summernote/dist/summernote.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/markdown/lib/markdown.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-markdown/js/bootstrap-markdown.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/bootstrap-markdown.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/bootstrap-notify/bootstrap-notify.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/bootstrap-notify.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/jquery-validation/dist/jquery.validate.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/jquery-validation/dist/additional-methods.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/jquery-validation.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/toastr/build/toastr.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/raphael/raphael.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/morris.js/morris.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/chart.js/dist/Chart.bundle.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/vendors/bootstrap-session-timeout/dist/bootstrap-session-timeout.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/vendors/jquery-idletimer/idle-timer.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/waypoints/lib/jquery.waypoints.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/counterup/jquery.counterup.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/es6-promise-polyfill/promise.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/sweetalert2/dist/sweetalert2.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/js/vendors/sweetalert2.init.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/jquery.repeater/src/lib.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/jquery.repeater/src/jquery.input.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/jquery.repeater/src/repeater.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/general/dompurify/dist/purify.js' %}" type="text/javascript"></script>
+
+		<!--end:: Global Optional Vendors -->
+
+		<!--begin::Global Theme Bundle(used by all pages) -->
+		<script src="{% static 'back/js/demo1/scripts.bundle.js' %}" type="text/javascript"></script>
+
+		<!--end::Global Theme Bundle -->
+
+		<!--begin::Page Vendors(used by this page) -->
+		<script src="{% static 'back/vendors/custom/fullcalendar/fullcalendar.bundle.js' %}" type="text/javascript"></script>
+		<script src="{% static 'back/vendors/custom/gmaps/gmaps.js' %}" type="text/javascript"></script>
+
+		<!--end::Page Vendors -->
+
+		<!--begin::Page Scripts(used by this page) -->
+		<script src="{% static 'back/js/demo1/pages/dashboard.js' %}" type="text/javascript"></script>
+
+		<!--begin::Page Vendors(used by this page) -->
+		<script src="{% static 'back/vendors/custom/datatables/datatables.bundle.js' %}" type="text/javascript"></script>
+
+		<!--end::Page Vendors -->
+
+		<script type="text/javascript">
+	        $( "input[type=text]" ).addClass( "form-control" );
+	        $( "input[type=number]" ).addClass( "form-control" );
+	        $( "input[type=email]" ).addClass( "form-control" );
+	        $( "input[type=password]" ).addClass( "form-control" );
+	        $( "select" ).addClass( "form-control" );
+	        $( "textarea" ).addClass( "form-control" );
+	    </script>
+
+		<script type="text/javascript">
+	        $.fn.datepicker.dates['es'] = {
+	            days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
+	            daysShort: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+	            daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+	            months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+	            monthsShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+	            today: "Hoy",
+	            clear: "Reset",
+	            weekStart: 0
+	        };
+		</script>
+
+		<!--end::Page Scripts -->
+	</body>
+
+	<!-- end::Body -->
+</html>

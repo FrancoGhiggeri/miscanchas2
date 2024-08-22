@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load pagination_tags %}
+
+{% block title %}Buscador{% endblock %}
+
+{% load static %}
+{% block content %}
+
+	<main>
+		
+		<section class="hero_in hotels">
+			<div class="wrapper">
+				<div class="container">
+					<h1 class="fadeInUp"><span></span>Buscador</h1>
+				</div>
+			</div>
+		</section>
+		<!--/hero_in-->
+		
+<!-- 		<div class="filters_listing sticky_horizontal">
+			<div class="container">
+				<ul class="clearfix">
+					<li>
+						<div class="switch-field">
+							<input type="radio" id="all" name="listing_filter" value="all" checked data-filter="*" class="selected">
+							<label for="all">Todos</label>
+							<input type="radio" id="popular" name="listing_filter" value="popular" data-filter=".popular">
+							<label for="popular">Populares</label>
+							<input type="radio" id="latest" name="listing_filter" value="latest" data-filter=".latest">
+							<label for="latest">Últimas</label>
+						</div>
+					</li>
+					<li>
+						<div class="layout_view">
+							<a href="#0" class="active"><i class="icon-th"></i></a>
+							<a href="hotels-list-sidebar.html"><i class="icon-th-list"></i></a>
+						</div>
+					</li>
+					<li>
+						<a class="btn_map" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap" data-text-swap="Hide map" data-text-original="View on map">Ver en el mapa</a>
+					</li>
+				</ul>
+			</div>
+		</div> -->
+		<!-- /filters -->
+		
+		<div class="collapse" id="collapseMap">
+			<div id="map" class="map"></div>
+		</div>
+		<!-- End Map -->
+
+		<div class="container margin_60_35">
+			<div class="row">
+				<aside class="col-lg-3" id="sidebar">
+					<div id="filters_col">
+						<a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" id="filters_col_bt">Filtros </a>
+						<div class="collapse show" id="collapseFilters">
+							<form action="" method="get" id="" class="">
+						    {{ filter.form.as_p }}
+						<div class="columns four alpha omega">
+						    <button type="submit" class="btn btn-primary w-min-sm mb-0-25 waves-effect waves-light">Buscar</button>
+						</div>
+					</form>
+						</div>
+						<!--/collapse -->
+					</div>
+					<!--/filters col-->
+				</aside>
+				<!-- /aside -->
+
+				<div class="col-lg-9">
+					<div class="isotope-wrapper">
+						<div class="row">
+						{% autopaginate filter.qs 20 as filter_list %}
+							{% for cancha in filter_list %}  
+							<div class="col-md-6 isotope-item popular">
+								<div class="box_grid">
+									<figure>
+										<a href="{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{cancha.id}}/add_favorite" class="wish_bt"></a>
+										<a href="{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{cancha.id}}/detail">
+			                                {% for image in cancha.imagescancha_set.all %}
+			                                    {% if image.image %}
+			                                        <img src="{{SITE_ROOT}}/media/{{ image.image }}" class="img-fluid" alt="" width="800" height="533">
+			                                    {% endif %}
+			                                {% endfor %}
+											<div class="read_more">
+												<span>Ver más</span>
+											</div>
+										</a>
+										<small>{{cancha.deporte}} | {{cancha.superficie}}</small>
+									</figure>
+									<div class="wrapper">
+										<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>
+										<h3><a href="{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{cancha.id}}/detail">{{cancha.nombre}} en {{cancha.establecimiento.nombre}}</a></h3>
+										<p>{{cancha.descripcion}}</p>
+										<span class="price">Desde <strong id="price-{{cancha.id}}"></strong> /por hora</span>
+                                        <script type="text/javascript">
+                                            // calculate precio_sin_luz with comision
+                                            var precio_sin_luz_c_comision = (({{cancha.precio_sin_luz}} * comision) + {{cancha.precio_sin_luz}});
+                                            $('#price-{{cancha.id}}').text("$" + precio_sin_luz_c_comision);
+                                        </script>
+									</div>
+<!-- 									<ul>
+										<li><i class="ti-eye"></i> 164 views</li>
+										<li><div class="score"><span>Superb<em>350 Reviews</em></span><strong>8.9</strong></div></li>
+									</ul> -->
+								</div>
+							</div>
+							{% endfor %}
+						{% paginate %}
+						</div>
+						<!-- /row -->
+				</div>
+				<!-- /isotope-wrapper -->
+			
+				<!-- <p class="text-center"><a href="#0" class="btn_1 rounded add_top_30">Load more</a></p> -->
+
+				</div>
+				<!-- /col -->
+			</div>		
+		</div>
+		<!-- /container -->
+	</main>
+	<!--/main-->
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("input").addClass("form-control");
+		$("select").addClass("form-control");
+	});
+</script>
+
+{% load static %}
+<script src="{% static 'back/js/provin_optv2_for_filters.js' %}"></script>
+
+<script type="text/javascript">
+    // declare options
+    var id_superficie_select = {
+        'Futbol':  ['Cesped Natural','Cesped sintetico','otros'],
+        'Tenis':   ['Cancha rapida','Polvo de ladrillo','otros'],
+        'Basquet': ['Parquet','Cemento','Otros'],
+        'Paddle':  ['Cancha rapida']
+    };
+
+    // get previus values for update view
+    var sportValue = $('#id_deporte').val();
+    var surfacesValue = $('#id_superficie').val();
+    loadSurfaces();
+    function loadSurfaces() {
+
+        var $id_superficie = $('#id_superficie');
+
+        // hide input
+        $('#id_superficie').hide();
+
+        // create fake select
+        $("#id_superficie").after( "<select id='id_superficie_select'><option value=''>Selecciona un deporte primero</option></select>" );
+
+        // set id on selects
+        var $id_superficie_select = $('#id_superficie_select');
+        var $id_deporte = $('#id_deporte');
+
+        // generate values
+        function generateSurfaces() {
+            var id_deporte =  $('#id_deporte').val(), lcns = id_superficie_select[id_deporte] || [];
+            var html = $.map(lcns, function(lcn){
+                return '<option value="' + lcn + '">' + lcn + '</option>'
+            }).join('');
+            $id_superficie_select.html(html);
+        };
+
+        $('#id_deporte').change(function () {
+            console.log($('#id_deporte').val());
+            generateSurfaces();
+        });
+
+        // get values and set selects
+
+        if ($('#id_deporte').length && $('#id_deporte').val().length) {
+            $('#id_deporte').val(sportValue);
+            generateSurfaces();
+        } else {
+            $('#id_deporte').val($("#id_deporte").val());
+        };
+
+        if ($('#id_superficie').length && $('#id_superficie').val().length) {
+            $('#id_superficie_select').val(surfacesValue);
+        } else {
+            $('#id_superficie').val($("#id_superficie_select").val());
+            $('#id_superficie_select').append('<option value="">Selecciona un deporte primero</option>');
+        };
+
+        // write inputs
+
+        $( "#id_superficie_select" ).change(function() {
+            $('#id_superficie').val($("#id_superficie_select").val());
+        });
+
+        $( "#id_deporte" ).change(function() {
+            $('#id_deporte').val($("#id_deporte").val());
+            $('#id_superficie').val($("#id_superficie_select").val());
+        });
+    };
+</script>
+
+{% endblock %}

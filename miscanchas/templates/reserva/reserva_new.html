@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}Detalle de cancha{% endblock %}
+
+{% block content %}
+    <style type="text/css">
+        #price::before {
+          content: "$";
+        }
+    </style>
+
+    <main>
+        <div class="hero_in cart_section">
+            <div class="wrapper">
+                <div class="container">
+                    <div class="bs-wizard clearfix">
+                        <div class="bs-wizard-step active">
+                            <div class="text-center bs-wizard-stepnum">Reservar</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#0" class="bs-wizard-dot"></a>
+                        </div>
+
+                        <div class="bs-wizard-step disabled">
+                            <div class="text-center bs-wizard-stepnum">Señar</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#0" class="bs-wizard-dot"></a>
+                        </div>
+
+                        <div class="bs-wizard-step disabled">
+                            <div class="text-center bs-wizard-stepnum">Terminado!</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#0" class="bs-wizard-dot"></a>
+                        </div>
+                    </div>
+                    <!-- End bs-wizard -->
+                </div>
+            </div>
+        </div>
+        <!--/hero_in-->
+
+        <div class="bg_color_1">
+            <div class="container margin_60_35">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="box_cart">
+                            <form class="" method="POST" action="">
+                                {% csrf_token %}
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                <div class="form-group">
+                                    {{ form.fecha.label_tag }}
+                                    {{ form.fecha }}
+                                    {{ form.fecha.errors.as_text }}
+                                </div>
+                                <div class="form-group d-none">
+                                    {{ form.periodo.label_tag }}
+                                    {{ form.periodo }}
+                                    {{ form.periodo.errors.as_text }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="periodo_fake">Horario:</label>
+                                    <select id="periodo_fake" name="periodo_fake">
+                                    </select>
+                                </div>
+
+                                {% if cancha.precio_con_luz %}
+                                <div class="form-group luz-option">
+                                    {{ form.con_luz.label_tag }}
+                                    {{ form.con_luz }}
+                                    {{ form.con_luz.errors.as_text }}
+                                </div>
+                                {% endif %}
+                                
+                                <div class="cart-options clearfix">
+<!--                                     <div class="float-left">
+                                        <div class="apply-coupon">
+                                            <div class="form-group">
+                                                <input type="text" name="coupon-code" value="" placeholder="Your Coupon Code" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="btn_1 outline">Apply Coupon</button>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="float-right fix_mobile">
+                                        <button type="submit" class="btn_1 purchase">Continuar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        <!-- /cart-options -->
+                    </div>
+                    </div>
+                    <!-- /col -->
+                    
+                    <aside class="col-lg-4" id="sidebar">
+                        <div class="box_detail">
+                            <div id="total_cart">
+                                Precio <small>por hora</small> <span id="price" class="float-right" alt-text="{{cancha.precio_con_luz}}"></span>
+                            </div>
+                            <div class="cart_details">
+                                <p>⚠️ Pagarás solo la seña que es un %10, en el establecimiento pagarás el resto después de jugar.</p>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /bg_color_1 -->
+    </main>
+    <!--/main-->
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $( "input[type=text]" ).addClass( "form-control" );
+            $( "input[type=number]" ).addClass( "form-control" );
+            $( "select" ).addClass( "form-control" );
+            $( "textarea" ).addClass( "form-control" );
+
+            $('input[name="fecha"]').daterangepicker({
+                "singleDatePicker": true,
+                "autoApply": true,
+                parentEl:'#input_date',
+                "linkedCalendars": false,
+                "showCustomRangeLabel": false,
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    "daysOfWeek": [
+                        "Dom",
+                        "Lun",
+                        "Mar",
+                        "Mie",
+                        "Jue",
+                        "Vie",
+                        "Sáb"
+                    ],
+                    "monthNames": [
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Diciembre"
+                    ],
+                },
+                language: "es"
+            });
+
+            $.fn.extend({
+                toggleText: function(a, b){
+                    return this.text(this.text() == b ? a : b);
+                }
+            });
+
+            // calculate prices
+            var precio_sin_luz_c_comision = (({{cancha.precio_sin_luz}} * comision) + {{cancha.precio_sin_luz}});
+            {% if cancha.precio_con_luz %}
+                var precio_con_luz_c_comision = (({{cancha.precio_con_luz}} * comision) + {{cancha.precio_con_luz}});
+            {% endif %}
+
+            // set prices
+            $('#price').text(precio_sin_luz_c_comision);
+            
+            // switch prices
+            $('#id_con_luz').on("click", function() {
+                $("#price").toggleText(precio_sin_luz_c_comision, precio_con_luz_c_comision);
+            });
+
+            // set price on comision
+
+            // Generate horarios dropdown
+            dropdown = $('#periodo_fake');
+
+            dropdown.empty();
+
+            dropdown.prop('selectedIndex', 0);
+
+            $('#id_fecha').on('change', function() {
+                GenerateDropdown(this.value);
+            });
+
+            GenerateDropdown($('#id_fecha').val());
+
+            function GenerateDropdown (date){
+
+                dropdown.empty();
+
+                fecha = date
+                console.log(fecha);
+                const url = '{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{ cancha.id }}/reservar/'+fecha;
+                console.log(url);
+
+                // Populate dropdown with list of provinces
+                $.getJSON(url, function (data) {
+                    $.each(data, function (key, entry) {
+                        if (entry.status != "not-available") {
+                            dropdown.append($("<option "+entry.status+"></option>").text(entry.time));
+                        }
+                    })
+                });
+
+                // Get values from fakes dropdowns
+                $('#periodo_fake').on('change', function() {
+                    $("#id_periodo").val(this.value);
+                });
+
+                dropdown.append('<option selected="true" disabled>Selecciona el horario</option>');
+            };
+        });
+    </script>
+
+{% endblock %}

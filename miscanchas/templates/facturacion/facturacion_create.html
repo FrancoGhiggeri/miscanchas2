@@ -1,0 +1,86 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Agregar datos de Facturación{% endblock %}
+
+{% block content %}
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Facturación</h3>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+
+<!--Begin::Dashboard 1-->
+
+<div class="col-lg-12">
+
+    <!--begin::Portlet-->
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Agregar datos
+                </h3>
+            </div>
+        </div>
+
+        <!--begin::Form-->
+        <form class="kt-form" id="" method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            <div class="kt-portlet__body">
+                <div class="kt-section kt-section--first">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet purus vitae nibh placerat venenatis. Nunc eget enim lorem. Duis vehicula augue augue, in blandit libero gravida nec.</p>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label>{{ form.establecimiento.label_tag }}</label>
+                            {{ form.establecimiento }}
+                            {{ form.establecimiento.errors.as_text }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label>Selecciona el método de pago preferido para recibir los pagos:</label>
+                            {{ form.metodo_de_pago }}
+                            {{ form.metodo_de_pago.errors.as_text }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label>{{ form.cbu.label_tag }}</label>
+                            {{ form.cbu }}
+                            {{ form.cbu.errors.as_text }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label>{{ form.mercadopago.label_tag }}</label>
+                            {{ form.mercadopago }}
+                            {{ form.mercadopago.errors.as_text }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <button type="submit" class="btn btn-primary">Continuar</button>
+                    <button type="reset" class="btn btn-secondary">Cancelar</button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+ </div>
+
+{% endblock %}

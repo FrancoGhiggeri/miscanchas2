@@ -1,0 +1,66 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Detalle de Reserva{% endblock %}
+
+{% block content %}
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Detalle de Reserva</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">#{{ reserva.id }}</span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__head kt-portlet__head--lg">
+			<div class="kt-portlet__head-label">
+				<h3 class="kt-portlet__head-title">
+					Detalles de la reserva
+				</h3>
+			</div>
+			<div class="kt-portlet__head-toolbar">
+				<div class="kt-portlet__head-wrapper">
+					<div class="kt-portlet__head-actions">
+						<div class="dropdown dropdown-inline">
+						<a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/cancelar" class="btn btn-danger">
+							Cancelar reserva
+						</a>
+						<a href="{{SITE_ROOT}}/backoffice/reservas/{{ reserva.id }}/update" class="btn btn-primary">Actualizar asistencia</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="kt-portlet__body">
+			<div class="row">
+				<div class="col-md-12">
+					<p> Creador: {{ reserva.creador_de_reserva.nombre }} {{ reserva.creador_de_reserva.apellido }}</p>
+                    <p> Cancha: {{ reserva.cancha }}</p>
+                    <p> Fecha: {{ reserva.fecha }}</p>
+                    <p> Horario: {{ reserva.periodo }}hs</p>
+                    <p> Con luz: {% if reserva.con_luz %} Si {% else %} No {% endif %}</p>
+                    <p> Seña pagada: AR${{ reserva.deposito_reserva }}</p>
+                    <p> Saldo: AR${{ reserva.saldo }}</p>
+                    <p> Precio de : AR${{ reserva.deposito_reserva }}</p>
+                    <p> ¿Asistió?: {% if reserva.asistio %} Si {% else %} No {% endif %}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- end:: Content -->
+
+{% endblock %}

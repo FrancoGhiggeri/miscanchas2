@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}Mis Reservas{% endblock %}
+
+{% block content %}
+
+    <main>
+        <section class="hero_in hotels_detail">
+            <div class="wrapper">
+                <div class="container">
+                    <h1 class="fadeInUp"><span></span>Mis Reservas</h1>
+                </div>
+            </div>
+        </section>
+        <!--/hero_in-->
+
+        <div class="bg_color_1">
+            <div class="container margin_60_35">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <section id="description">
+                            <h2>Mis reservas</h2>
+                            <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget ante finibus elit pulvinar vestibulum et eget nibh. Etiam gravida nisi eu consequat mattis.</p> -->
+                            <div class="table-responsive">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Cancha</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Horario</th>
+                                    <th scope="col">Seña pagada</th>
+                                    <th scope="col">Saldo</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Acciones</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% if object_list %}
+                                    {% for reserva in object_list %} 
+                                      {% if reserva.estado == "acreditada" %}
+                                        <tr>
+                                          <th scope="row">{{ reserva.id }}</th>
+                                          <td><a href="{{SITE_ROOT}}/establecimiento/{{reserva.cancha.establecimiento.id}}/cancha/{{reserva.cancha.id}}/detail" target="_blank">{{ reserva.cancha }}</a></td>
+                                          <td>{{ reserva.fecha }}</td>
+                                          <td>{{ reserva.periodo }}</td>
+                                          <td>${{ reserva.deposito_reserva }}</td>
+                                          <td>${{ reserva.saldo }}</td>
+                                          <td>{% if reserva.confirmada %} Confirmada {% endif %} {% if reserva.pendiente %} Pendiente {% endif %} {% if reserva.cancelada %} Cancelada {% endif %} {% if reserva.cancelada_por_cliente %} Cancelada por mi {% endif %}</td>
+                                          <td>{% if reserva.confirmada or reserva.pendiente %}<a href="{{SITE_ROOT}}/cancelar_reserva/{{ reserva.id }}/" data-toggle="tooltip" data-placement="top" title="Tu reserva se perderá">Cancelar</a>{% endif %}</td>
+                                        </tr>
+                                      {% endif %}
+                                    {% endfor %}
+                                  {% endif %}
+                                </tbody>
+                              </table>
+                            </div>
+                            <!-- /row -->
+                        </section>
+                        <!-- /section -->
+                    </div>
+                    <!-- /col -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /bg_color_1 -->
+    </main>
+    <!--/main-->
+
+{% endblock %}

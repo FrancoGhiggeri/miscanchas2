@@ -1,0 +1,70 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Detalle de Establecimiento{% endblock %}
+
+{% block content %}
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Detalle de Establecimiento</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">#{{ establecimiento.id }}</span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__head kt-portlet__head--lg">
+			<div class="kt-portlet__head-label">
+				<h3 class="kt-portlet__head-title">
+					{{ establecimiento.nombre }}
+				</h3>
+			</div>
+			<div class="kt-portlet__head-toolbar">
+				<div class="kt-portlet__head-wrapper">
+					<div class="kt-portlet__head-actions">
+						<div class="dropdown dropdown-inline">
+						<a href="{{SITE_ROOT}}/backoffice/establecimiento/{{ establecimiento.id }}/update" class="btn btn-brand btn-elevate btn-icon-sm">
+							<i class="la la-edit"></i>
+							Editar
+						</a>
+						<a href="{{SITE_ROOT}}/backoffice/establecimiento/{{ establecimiento.id }}/delete" class="btn btn-danger btn-elevate btn-icon-sm">
+							<i class="la la-trash"></i>
+							Eliminar
+						</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="kt-portlet__body">
+			<div class="row">
+				<div class="col-md-12">
+					<p> Email: {{ establecimiento.owner.user }}</p>
+                    <p> Nombre y apellido: {{ establecimiento.owner.nombre }} {{ establecimiento.owner.apellido }}</p>
+                    <p> Dirección: {{ establecimiento.direccion }}</p>
+                    <p> Localidad: {{ establecimiento.localidad }}</p>
+                    <p> Provincia: {{ establecimiento.provincia }}</p>
+                    <p> Método de pago preferido: {{ establecimiento.facturacion.metodo_de_pago }}</p>
+                    <p> Mercadopago: {{ establecimiento.facturacion.mercadopago }}</p>
+                    <p> CBU: {{ establecimiento.facturacion.cbu }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- end:: Content -->
+
+{% endblock %}

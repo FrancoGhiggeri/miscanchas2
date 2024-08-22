@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MisCanchas | Inicio de sesión</title>
+
+    {% load static %}
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="{% static 'front/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/vendors.css' %}" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{% static 'front/css/custom.css' %}" rel="stylesheet">
+    {% include "components/facebook-pixel.html" %}
+</head>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Panagea - Premium site template for travel agencies, hotels and restaurant listing.">
+    <meta name="author" content="Ansonika">
+    <title>MisCanchas | Nuevo Registro</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="{% static 'front/img/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'img/apple-touch-icon-57x57-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'front/img/apple-touch-icon-72x72-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'front/img/apple-touch-icon-114x114-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{% static 'front/img/apple-touch-icon-144x144-precomposed.png' %}">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="{% static 'front/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/vendors.css' %}" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{% static 'front/css/custom.css' %}" rel="stylesheet">
+
+</head>
+
+<body id="login_bg">
+    
+    <nav id="menu" class="fake_menu"></nav>
+    
+    <div id="preloader">
+        <div data-loader="circle-side"></div>
+    </div>
+    <!-- End Preload -->
+    
+    <div id="login">
+        <aside>
+            <figure>
+                <a href="{{ SITE_ROOT }}"><img src="{% static 'front/img/logo_sticky.png' %}" width="155" height="36" data-retina="true" alt="" class="logo_sticky"></a>
+            </figure>
+              <form class="m-t" role="form" method='POST' action="{% url 'create_profile' %}">{% csrf_token %}
+
+                {{ form.non_field_errors.as_text }}
+
+                <div class="form-group">
+                    <label>{{ form.nombre.label_tag }}</label>
+                        {{ form.nombre }}
+                        {{ form.nombre.errors.as_text }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.apellido.label_tag }}</label>
+                        {{ form.apellido }}
+                        {{ form.apellido.errors.as_text }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.fecha_nacimiento.label_tag }}</label>
+                        {{ form.fecha_nacimiento }}
+                        {{ form.fecha_nacimiento.errors.as_text }}
+                </div>
+                <button type="submit" class="btn_1 rounded full-width">Continuar</button>
+            </form>
+            <div class="copy">© 2020 MisCanchas </br>Desarrollado por <a href="https://www.socialbits.net" target="_blank">Socialbits.net</a></div>
+        </aside>
+    </div>
+    <!-- /login -->
+        
+    <!-- COMMON SCRIPTS -->
+    <script src="{% static 'front/js/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static 'front/js/common_scripts.js' %}"></script>
+    <script src="{% static 'front/js/main.js' %}"></script>
+    <script src="{% static 'front/assets/validate.js' %}"></script>
+
+
+    <script type="text/javascript">
+        $( "input" ).addClass( "form-control" );
+        $("#id_fecha_nacimiento").prop("type", "date");
+    </script>
+  
+</body>
+</html>

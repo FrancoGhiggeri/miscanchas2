@@ -1,0 +1,172 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Cancelaciones de usuarios{% endblock %}
+
+{% block content %}
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Cancelaciones de usuarios</h3>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<div class="alert alert-light alert-elevate" role="alert">
+		<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+		<div class="alert-text">
+			Estos son los pedidos de reservas, ya aceptadas que los usuarios han cancelado..
+		</div>
+	</div>
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__body">
+
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#" data-target="#pendientes">A liquidar</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#pagado">Pagadas</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#revisar">A revisar</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="pendientes" role="tabpanel">
+					<!--begin: A liquidar -->
+					<table class="table table-striped- table-bordered table-hover table-checkable display">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre de usuario</th>
+								<th>Cancha</th>
+								<th>Fecha</th>
+								<th>Horario</th>
+								<th>Seña pagada</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if object_list %}
+								{% for reserva in object_list %} 
+									{% if reserva.retiro == 'A liquidar' and reserva.estado == "acreditada" %}
+									<tr>
+										<td>{{ reserva.id }}</td>
+										<td>{{ reserva.creador_de_reserva.user.email }}</td>
+										<td>{{ reserva.cancha.nombre }}</td>
+										<td>{{ reserva.fecha }}</td>
+										<td>{{ reserva.periodo}}</td>
+										<td>${{ reserva.deposito_reserva }}</td>
+										<td>{{ reserva.retiro }}</td>
+									</tr>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+					<!--end: A liquidar -->
+				</div>
+				<div class="tab-pane" id="pagado" role="tabpanel">
+					<!--begin: Pagado -->
+					<table class="table table-striped- table-bordered table-hover table-checkable display">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre de usuario</th>
+								<th>Cancha</th>
+								<th>Fecha</th>
+								<th>Horario</th>
+								<th>Seña pagada</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if object_list %}
+								{% for reserva in object_list %} 
+									{% if reserva.retiro == 'Pagado' and reserva.estado == "acreditada" %}
+									<tr>
+										<td>{{ reserva.id }}</td>
+										<td>{{ reserva.creador_de_reserva.user.email }}</td>
+										<td>{{ reserva.cancha.nombre }}</td>
+										<td>{{ reserva.fecha }}</td>
+										<td>{{ reserva.periodo }}</td>
+										<td>${{ reserva.deposito_reserva }}</td>
+										<td>Aceptada</td>
+									</tr>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+					<!--end: Pagado -->
+				</div>
+				<div class="tab-pane" id="revisar" role="tabpanel">
+					<!--begin: Revisar -->
+					<table class="table table-striped- table-bordered table-hover table-checkable display">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre de usuario</th>
+								<th>Cancha</th>
+								<th>Fecha</th>
+								<th>Horario</th>
+								<th>Seña pagada</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if object_list %}
+								{% for reserva in object_list %} 
+									{% if reserva.retiro == 'A revisar' and reserva.estado == "acreditada" %}
+									<tr>
+										<td>{{ reserva.id }}</td>
+										<td>{{ reserva.creador_de_reserva.user.email }}</td>
+										<td>{{ reserva.cancha.nombre }}</td>
+										<td>{{ reserva.fecha }}</td>
+										<td>{{ reserva.periodo }}</td>
+										<td>${{ reserva.deposito_reserva }}</td>
+										<td>Cancelada</td>
+									</tr>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+					<!--end: Revisar -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- end:: Content -->
+
+<script type="text/javascript">
+    $('[name="reservas"]').addClass( "kt-menu__item--active kt-menu__item--open" );
+    $('[name="cancelaciones_usuarios"]').addClass( "kt-menu__item--active" );
+</script>
+
+<script>
+$(document).ready(function() {
+    $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+        $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+    } );
+     
+    $('table.display').DataTable( {
+		responsive: true,
+		order: [[ 0, "desc" ]],
+		language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+        }
+    } );
+});
+</script>
+
+{% endblock %}

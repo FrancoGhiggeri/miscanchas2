@@ -1,0 +1,14 @@
+El establecimiento confirmo tu reserva
+
+Detalles de tu reserva:
+
+	Reservado por: {{ reserva.creador_de_reserva.nombre }} {{ reserva.creador_de_reserva.apellido }}
+	Seña pagada: AR${{ reserva.deposito_reserva }}
+	Saldo a pagar (lo abonas directamente en la cancha): AR${{ reserva.saldo }}
+	Fecha: {{ reserva.fecha }}
+	Horario: {{ reserva.periodo }}hs
+
+
+¡Esperamos su visita!
+
+ref: #{{ reserva.id }}

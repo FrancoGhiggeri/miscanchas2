@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="MisCanchas - Reserva online tu cancha">
+    <meta name="author" content="Socialbits">
+    <title>MisCanchas | {% block title %}{% endblock %}</title>
+    
+    {% load static %}
+    <!-- Favicons-->
+    <link rel="icon" href="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png" sizes="32x32">
+    <link rel="icon" href="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png"><meta name="msapplication-TileImage" content="https://soporte.miscanchas.com/wp-content/uploads/2020/12/Favicon-1.png">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="{% static 'front/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/vendors.css' %}" rel="stylesheet">
+    <link href="{% static 'front/css/simple-lightbox.css' %}" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{% static 'front/css/custom.css' %}" rel="stylesheet">
+
+    <!-- COMMON SCRIPTS -->
+    <script src="{% static 'front/js/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static 'front/js/common_scripts.js' %}"></script>
+    <script src="{% static 'front/js/simple-lightbox.js' %}"></script>
+
+    <!-- Set comision -->
+    <script type="text/javascript">
+        var comision = 0.10;
+    </script>
+
+</head>
+
+
+<body>
+        
+    <div id="page">
+        
+    <header class="header menu_fixed">
+        <div id="preloader"><div data-loader="circle-side"></div></div><!-- /Page Preload -->
+        <div id="logo">
+            <a href="{{SITE_ROOT}}/">
+                <img src="{% static 'front/img/logo.png' %}" width="150" height="36" data-retina="true" alt="" class="logo_normal">
+                <img src="{% static 'front/img/logo_sticky.png' %}" width="150" height="36" data-retina="true" alt="" class="logo_sticky">
+            </a>
+        </div>
+
+        <!-- /top_menu -->
+        <a href="#menu" class="btn_mobile">
+            <div class="hamburger hamburger--spin" id="hamburger">
+                <div class="hamburger-box">
+                    <div class="hamburger-inner"></div>
+                </div>
+            </div>
+        </a>
+        <nav id="menu" class="main-menu">
+            <ul>
+                {% if user.is_anonymous %}
+                <li><span><a href="{{ SITE_ROOT }}/">Inicio</a></span>
+                <li><span><a href="{{ SITE_ROOT }}/login/">Acceder</a></span></li>
+                <li><span><a href="{{ SITE_ROOT }}/register/">Registrarme</a></span></li>
+                <li><span><a href="https://soporte.miscanchas.com/" target="_blank">Ayuda</a></span></li>
+                {% endif %}
+                {% if not user.is_anonymous %}
+                <li><span><a href="{{ SITE_ROOT }}/">Inicio</a></span>
+                {% if not user.dueno %}
+                    {% if not user.is_superuser %}
+                        <li><span><a href="{{ SITE_ROOT }}/mis_reservas">Mis reservas</a></span></li>
+                        <li><span><a href="{{ SITE_ROOT }}/favoritos/list/">Mis Favoritos</a></span></li>
+                    {% endif %}
+                {% endif %}
+                {% if user.dueno %}
+                <li><span><a href="{{ SITE_ROOT }}/backoffice/home">Backoffice</a></span></li>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <li><span><a href="{{ SITE_ROOT }}/backoffice/admin/cancelaciones/">Backoffice</a></span></li>
+                {% endif %}
+                <li><span><a href="https://soporte.miscanchas.com/" target="_blank">Ayuda</a></span></li>
+                <li><span><a href="{{ SITE_ROOT }}/logout/">Cerrar sesión</a></span></li>
+                {% endif %}
+
+            </ul>
+        </nav>
+
+    </header>
+    <!-- /header -->
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        <div class="container margin_60_35">
+            <div class="row">
+                <div class="col-lg-5 col-md-12 p-r-5">
+                    <p><img src="{% static 'front/img/logo.png' %}" width="150" height="36" data-retina="true" alt=""></p>
+                    <p>MisCanchas® es una plataforma que conecta a los jugadores con los establecimientos deportivos, nos hacemos cargo de procesar la reserva de tu cancha y el pago de la seña para ahorrarte tiempo y simplificar al máximo tu reserva para que vos solo te enfoques en el partido.</p>
+                </div>
+                <div class="col-lg-3 col-md-6 ml-lg-auto">
+                    <h5>Links útiles</h5>
+                    <ul class="links">
+                        <li><a href="{{ SITE_ROOT }}/login/">Acceder</a></li>
+                        <li><a href="{{ SITE_ROOT }}/register/">Registrarme</a></li>
+                        <li><a href="{{ SITE_ROOT }}/owner/new/">Registrarme como establecimiento</a></li>
+                        <li><a href="https://soporte.miscanchas.com/">Ayuda</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>Datos de contacto</h5>
+                    <ul class="contacts">
+                        <li><a href="https://instagram.com/miscanchascom"><i class="ti-instagram"></i> @miscanchascom</a></li>
+                        <li><a href="mailto:soporte@miscanchas.com"><i class="ti-email"></i> soporte@miscanchas.com</a></li>
+                    </ul>
+<!--                     <div id="newsletter">
+                        <h6>Newsletter</h6>
+                        <div id="message-newsletter"></div>
+                        <form method="post" action="assets/newsletter.php" name="newsletter_form" id="newsletter_form">
+                            <div class="form-group">
+                                <input type="email" name="email_newsletter" id="email_newsletter" class="form-control" placeholder="Tu email">
+                                <input type="submit" value="Submit" id="submit-newsletter">
+                            </div>
+                        </form>
+                    </div> -->
+                </div>
+            </div>
+            <!--/row-->
+            <hr>
+            <div class="row">
+                <div class="col-lg-6">
+                    <ul id="footer-selector">
+<!--                         <li>
+                            <div class="styled-select" id="lang-selector">
+                                <select>
+                                    <option value="English" selected>English</option>
+                                    <option value="French">French</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Russian">Russian</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="styled-select" id="currency-selector">
+                                <select>
+                                    <option value="US Dollars" selected>US Dollars</option>
+                                    <option value="Euro">Euro</option>
+                                </select>
+                            </div>
+                        </li> -->
+                        <!-- <li><img src="{% static 'front/img/cards_all.svg' %}" alt=""></li> -->
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <ul id="additional_links">
+<!--                         <li><a href="#0">Terms and conditions</a></li>
+                        <li><a href="#0">Privacy</a></li> -->
+                        <li><span>© 2020 MisCanchas</span> | Desarrollado por <a href="https://www.socialbits.net" target="⎽blank">Socialbits.net</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--/footer-->
+    </div>
+    <!-- page -->
+    
+    <!-- Sign In Popup -->
+    <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
+        <div class="small-dialog-header">
+            <h3>Sign In</h3>
+        </div>
+        <form>
+            <div class="sign-in-wrapper">
+                <a href="#0" class="social_bt facebook">Login with Facebook</a>
+                <a href="#0" class="social_bt google">Login with Google</a>
+                <div class="divider"><span>Or</span></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="email" id="email">
+                    <i class="icon_mail_alt"></i>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="password" id="password" value="">
+                    <i class="icon_lock_alt"></i>
+                </div>
+                <div class="clearfix add_bottom_15">
+                    <div class="checkboxes float-left">
+                        <label class="container_check">Remember me
+                          <input type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="float-right mt-1"><a id="forgot" href="javascript:void(0);">Forgot Password?</a></div>
+                </div>
+                <div class="text-center"><input type="submit" value="Log In" class="btn_1 full-width"></div>
+                <div class="text-center">
+                    Don’t have an account? <a href="register.html">Sign up</a>
+                </div>
+                <div id="forgot_pw">
+                    <div class="form-group">
+                        <label>Please confirm login email below</label>
+                        <input type="email" class="form-control" name="email_forgot" id="email_forgot">
+                        <i class="icon_mail_alt"></i>
+                    </div>
+                    <p>You will receive an email containing a link allowing you to reset your password to a new preferred one.</p>
+                    <div class="text-center"><input type="submit" value="Reset Password" class="btn_1"></div>
+                </div>
+            </div>
+        </form>
+        <!--form -->
+    </div>
+    <!-- /Sign In Popup -->
+    
+    <div id="toTop"></div><!-- Back to top button -->
+
+    <script src="{% static 'front/js/main.js' %}"></script>
+    <script src="{% static 'front/assets/validate.js' %}"></script>
+
+    <!-- Map -->
+    <script src="{% static 'front/js/infobox.js' %}"></script>
+    
+    <!-- INPUT QUANTITY  -->
+    <script src="{% static 'front/js/input_qty.js' %}"></script>
+    
+</body>
+</html>
+

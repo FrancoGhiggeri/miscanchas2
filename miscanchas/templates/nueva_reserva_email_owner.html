@@ -1,0 +1,18 @@
+### NUEVA RESERVA OWNER
+
+Recibiste una nueva reserva en {{ reserva.cancha }} para el {{ reserva.fecha }} de {{ reserva.periodo }}hs.
+
+<< IMPORTANTE: Tenes que confirmar la reserva desde la plataforma lo antes posible >>
+
+Detalles de tu reserva:
+
+	Reservado por: {{ reserva.creador_de_reserva.nombre }} {{ reserva.creador_de_reserva.apellido }}
+	Seña pagada: AR${{ reserva.deposito_reserva }}
+	Saldo a pagar (lo abonas directamente en la cancha): AR${{ reserva.saldo }}
+	Fecha: {{ reserva.fecha }}
+	Horario: {{ reserva.periodo }}hs
+
+
+¡Esperamos su visita!
+
+ref: #

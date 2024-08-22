@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load static %}
+    <style type="text/css">
+        .nice-select {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .nice-select .list {
+            width: 100%;
+        }
+    </style>
+    <main>
+        <section class="hero_single version_2">
+            <div class="wrapper">
+                <div class="container">
+                    <h3>Reservá una cancha</h3>
+                    <form action="/buscar/" method="get" class="col-md-12">
+                        <div class="row home-search">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select name="deporte" id="id_deporte" class="form-control">
+                                        <option value="Futbol">Fútbol</option>
+                                        <option value="Basquet">Básquet</option>
+                                        <option value="Paddle">Paddle</option>
+                                        <option value="Tenis">Tenis</option>
+                                    </select>
+                                </div>
+                            </div>
+<!-- hide for now                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="text" name="superficie" id="id_superficie">
+                                </div>
+                            </div> -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" name="establecimiento__provincia" id="id_provincia">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" name="establecimiento__localidad" id="id_localidad">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <!-- <a class="ls-l btn_1" href="{{SITE_ROOT}}/buscar" style="width: 100%;height: 100%;">¡Buscar ahora!</a> -->
+                                <input type="submit" class="btn_1 rounded" value="Buscar">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- /hero_single -->
+
+        <div class="container-fluid margin_80_0">
+            <div class="main_title_2">
+                <span><em></em></span>
+                <h2>Establecimientos más polulares</h2>
+                <p>Te recomendamos las canchas más cercanas y con mejores calificaciones.</p>
+            </div>
+            {% if establecimientos %}
+            <div id="reccomended" class="owl-carousel owl-theme">
+                {% for establecimiento in establecimientos %}
+                <div class="item">
+                    <div class="box_grid">
+                        <figure>
+                            <a href="{{SITE_ROOT}}/establecimiento/{{establecimiento.id}}/detail">
+                                {% for image in establecimiento.images_set.all %}
+                                    {% if image.image %}
+                                        <img src="{{SITE_ROOT}}/media/{{ image.image }}" class="img-fluid" alt="" width="800" height="533">
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="read_more">
+                                    <span>Ver más</span>
+                                </div>
+                            </a>
+                            <!-- <small>Césped sitetico</small> -->
+                        </figure>
+                        <div class="wrapper">
+                            <h3><a href="{{SITE_ROOT}}/establecimiento/{{establecimiento.id}}/detail">{{ establecimiento.nombre }}</a></h3>
+                            <p class="mb-0">{{establecimiento.localidad}}, {{establecimiento.provincia}}</p>
+                            <!-- <span class="price">Desde <strong>${{establecimiento.cancha.provincia}}</strong> /por persona</span> -->
+                        </div>
+<!--                         <ul>
+                            <li><i class="icon_clock_alt"></i> 1h 30min</li>
+                            <li><div class="score"><span>Superb<em>350 Calificaciones</em></span><strong>8.9</strong></div></li>
+                        </ul> -->
+                    </div>
+                </div>
+                <!-- /item -->
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- /carousel -->
+<!--             <div class="container">
+                <p class="btn_home_align"><a href="{{SITE_ROOT}}/buscar" class="btn_1 rounded">Ver todos</a></p>
+            </div> -->
+            <!-- /container -->
+            <hr class="large">
+        </div>
+        <!-- /container -->
+
+        <div class="call_section">
+            <div class="container clearfix">
+                <div class="col-lg-5 col-md-6 float-right wow" data-wow-offset="250">
+                    <div class="block-reveal">
+                        <div class="block-vertical"></div>
+                        <div class="box_1">
+                            <h3>¿Tenes canchas para alquilar?</h3>
+                            <p>MisCanchas® otorga a tu establecimiento un sistema de gestión de reservas 100% automatizado. <br> Desde la plataforma podes gestionar todas las reservas de tus clientes, y visualizarlas en un calendario.</p>
+                            <a href="https://miscanchas.com/owner/new/" class="btn_1 rounded">¡Registrate ahora!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/call_section-->
+    </main>
+    <!-- /main -->
+
+    {% load static %}
+    <script src="{% static 'back/js/provin_optv2.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("select").addClass("form-control");
+        });
+    </script>
+    <script type="text/javascript">
+        // declare options
+        var id_superficie_select = {
+            'Futbol':  ['Cesped Natural','Cesped sintetico','otros'],
+            'Tenis':   ['Cancha rapida','Polvo de ladrillo','otros'],
+            'Basquet': ['Parquet','Cemento','Otros'],
+            'Paddle':  ['Cancha rapida']
+        };
+
+        // get previus values for update view
+        var sportValue = $('#id_deporte').val();
+        var surfacesValue = $('#id_superficie').val();
+        loadSurfaces();
+        function loadSurfaces() {
+
+            var $id_superficie = $('#id_superficie');
+
+            // hide input
+            $('#id_superficie').hide();
+
+            // create fake select
+            $("#id_superficie").after( "<select id='id_superficie_select'></select>" );
+
+            // set id on selects
+            var $id_superficie_select = $('#id_superficie_select');
+            var $id_deporte = $('#id_deporte');
+
+            // generate values
+            function generateSurfaces() {
+                var id_deporte =  $('#id_deporte').val(), lcns = id_superficie_select[id_deporte] || [];
+                var html = $.map(lcns, function(lcn){
+                    return '<option value="' + lcn + '">' + lcn + '</option>'
+                }).join('');
+                $id_superficie_select.html(html);
+                var option = $('<option></option>').attr("value", "").text("Todas las superficies");
+                $id_superficie_select.prepend(option);
+                $id_superficie_select.val('');
+            };
+
+            $('#id_deporte').change(function () {
+                console.log($('#id_deporte').val());
+                generateSurfaces();
+            });
+
+            // get values and set selects
+
+            if ($('#id_deporte').length && $('#id_deporte').val().length) {
+                $('#id_deporte').val(sportValue);
+                generateSurfaces();
+            } else {
+                $('#id_deporte').val($("#id_deporte").val());
+            };
+
+            if ($('#id_superficie').length && $('#id_superficie').val().length) {
+                $('#id_superficie_select').val(surfacesValue);
+            } else {
+                $('#id_superficie').val($("#id_superficie_select").val());
+                // $('#id_superficie_select').append('<option value="">Selecciona un deporte primero</option>');
+            };
+
+            // write inputs
+
+            $( "#id_superficie_select" ).change(function() {
+                $('#id_superficie').val($("#id_superficie_select").val());
+            });
+
+            $( "#id_deporte" ).change(function() {
+                $('#id_deporte').val($("#id_deporte").val());
+                $('#id_superficie').val($("#id_superficie_select").val());
+            });
+        };
+    </script>
+
+
+{% endblock %}

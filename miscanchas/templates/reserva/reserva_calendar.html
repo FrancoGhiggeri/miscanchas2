@@ -1,0 +1,91 @@
+{% extends "base_admin.html" %}
+{% load i18n %}
+
+{% block title %}Calendario de Reservas{% endblock %}
+
+{% block content %}
+
+<link href="https://unpkg.com/@fullcalendar/core@4.3.1/main.min.css" rel="stylesheet" type="text/css" />
+<link href="https://unpkg.com/@fullcalendar/daygrid@4.3.0/main.min.css" rel="stylesheet" type="text/css" />
+<link href="https://unpkg.com/@fullcalendar/timegrid@4.3.0/main.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://unpkg.com/@fullcalendar/core@4.3.1/main.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@fullcalendar/daygrid@4.3.0/main.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@fullcalendar/timegrid@4.3.0/main.min.js"></script>
+
+<!-- begin:: Content Head -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Calendario de Reservas</h3>
+        </div>
+    </div>
+</div>
+
+<!-- end:: Content Head -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<div class="alert alert-light alert-elevate" role="alert">
+		<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+		<div class="alert-text">
+			Este es el calendario de reservas, son reservas que ya confirmaste.
+		</div>
+	</div>
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__body">
+			<div id='calendar'></div>
+		</div>
+	</div>
+</div>
+
+<!-- end:: Content -->
+
+<script type="text/javascript">
+    $('[name="reservas"]').addClass( "kt-menu__item--active kt-menu__item--open" );
+    $('[name="reservas_calendar"]').addClass( "kt-menu__item--active" );
+</script>
+
+<script type="text/javascript">
+	let url = 'https://miscanchas.com/backoffice/reservas/json/';
+	var result;
+	// let url = 'http://127.0.0.1:8000/backoffice/reservas/json/';
+	// Example
+	// var result = [
+	//     {
+	//       id: 'a',
+	//       title: 'my event',
+	//       start: "2020-12-01 05:00",
+	//       end: "2020-12-01 06:00"
+	//     }
+	// ]
+
+	fetch(url)
+	.then(res => res.json())
+	.then((out) => {
+		result = out;
+		renderCalentar();
+		// console.log(result);
+		// console.log(out);
+	})
+	.catch(err => { throw err });
+
+	function renderCalentar() {
+	  var calendarEl = document.getElementById('calendar');
+	  var calendar = new FullCalendar.Calendar(calendarEl, {
+	    plugins: [ 'timeGrid' ],
+	    timeZone: 'UTC',
+	    defaultView: 'timeGridWeek',
+	    header: {
+	      left: 'prev,next today',
+	      center: 'title',
+	      right: 'timeGridWeek,timeGridDay'
+	    },
+	    events: result,
+	    locale: 'es'
+	  });
+
+	  calendar.render();
+	};
+</script>
+
+{% endblock %}
