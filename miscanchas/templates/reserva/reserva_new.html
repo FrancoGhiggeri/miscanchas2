@@ -58,7 +58,7 @@
                                 {% endfor %}
                                 <div class="form-group">
                                     {{ form.fecha.label_tag }}
-                                    {{ form.fecha }}
+                                    <input type="date" name="fecha" id="id_fecha" class="form-control">
                                     {{ form.fecha.errors.as_text }}
                                 </div>
                                 <div class="form-group d-none">
@@ -79,22 +79,26 @@
                                     {{ form.con_luz.errors.as_text }}
                                 </div>
                                 {% endif %}
+
+                                <!--<label>Medio de Pago</label>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn active">
+                                        <input type="radio" name="role" id="paypal" value="paypal" autocomplete="off" checked> PayPal
+                                    </label>
+                                    <label class="btn">
+                                        <input type="radio" name="role" id="mp" value="mp" autocomplete="off"> Mercado Pago
+                                    </label>
+                                </div>-->
+                                <input type="text" name="codigo_operacion" id="codigo_operacion" value="{{codigo_operacion}}" hidden />
+
+                                <div id="paypal-button-container"></div>
                                 
                                 <div class="cart-options clearfix">
-<!--                                     <div class="float-left">
-                                        <div class="apply-coupon">
-                                            <div class="form-group">
-                                                <input type="text" name="coupon-code" value="" placeholder="Your Coupon Code" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="button" class="btn_1 outline">Apply Coupon</button>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <div class="float-right fix_mobile">
                                         <button type="submit" class="btn_1 purchase">Continuar</button>
                                     </div>
                                 </div>
+                                
                             </form>
                         <!-- /cart-options -->
                     </div>
@@ -120,8 +124,166 @@
     </main>
     <!--/main-->
 
+    {% csrf_token %}
+    <script 
+        src="https://www.paypal.com/sdk/js?client-id={{paypal_client_id}}&currency=USD">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0];
+            let precio = document.getElementById('price');
+            let luzCheckbox = document.getElementById('id_con_luz');
+            let periodo = document.getElementById('id_periodo');
+            let periodoDropdownFake = document.getElementById('periodo_fake');
+            let dateInput = document.getElementById('id_fecha');
+
+            document.querySelectorAll("input[type=text], input[type=number], select, textarea").forEach(function(el) {
+                el.classList.add("form-control");
+            });
+
+            /*const fechaInput = document.querySelector('input[name="fecha"]');
+            if (fechaInput) {
+                // Initialize the date picker (assuming a date picker library is used in place of daterangepicker)
+                new Datepicker(fechaInput, {
+                    format: 'dd/mm/yyyy',
+                    autoApply: true,
+                    locale: {
+                        daysOfWeek: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sáb"],
+                        monthNames: [
+                            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                        ]
+                    },
+                    language: "es"
+                });
+            }*/
+
+            // Toggle text function
+            HTMLElement.prototype.toggleText = function(a, b) {
+                this.textContent = this.textContent === b ? a : b;
+            };
+
+            const comision = 1.10;
+            const precioSinLuz = {{cancha.precio_sin_luz}};
+            const precioConLuz = {{cancha.precio_con_luz}};
+            const precioSinLuzConComision = (precioSinLuz * comision).toFixed(2);
+            const precioConLuzConComision = (precioConLuz * comision).toFixed(2);
+
+            if (precio) {
+                precio.textContent = precioSinLuzConComision;
+            }
+
+            if (luzCheckbox && precio) {
+                luzCheckbox.addEventListener("click", function() {
+                    precio.toggleText(precioSinLuzConComision.toString(), precioConLuzConComision.toString());
+                });
+            }
+
+            // Generate horarios dropdown
+            /*const dropdown = document.getElementById("periodo_fake");
+            const idFecha = document.getElementById("id_fecha");*/
+
+            // Set up event listeners
+            /*if (idFecha) {
+                idFecha.addEventListener("change", function() {
+                    GenerateDropdown(this.value);
+                });
+
+                // Initial dropdown population
+                GenerateDropdown(idFecha.value);
+            }*/
+
+            
+            let fechaCorrecta = dateInput.value;
+            //let fechaCorrecta = dateInput.value.replace(/\//g, "-");
+            if (dateInput) {
+                dateInput.addEventListener("change", function() {
+                    GenerateDropdown(this.value);
+                    fechaCorrecta = dateInput.value;
+                    //fechaCorrecta = dateInput.value.replace(/\//g, "-");
+                    console.log("Updated Date:", fechaCorrecta); 
+
+                    GenerateDropdown(dateInput.value);
+                });   
+            }
+
+            let periodoNumber = 0
+            console.log("???")
+            console.log(periodo)
+            periodoDropdownFake.addEventListener('change', function() {
+                if (periodo) {
+                    periodo.value = periodoDropdownFake.value;
+
+                    periodoNumber = periodoDropdownFake.value.split(":")[0];
+                    console.log("First Number:", periodoNumber); 
+                }
+            });
+
+            function GenerateDropdown(date) {
+                periodoDropdownFake.innerHTML = ''; // Clear existing options
+                const [year, month, day] = date.split("-"); // Split into parts
+                const formattedDate = `${day}-${month}-${year}`;
+                const url = `{{SITE_ROOT}}/establecimiento/{{cancha.establecimiento.id}}/cancha/{{ cancha.id }}/reservar/${day}/${month}/${year}`;
+                console.log(url);
+
+                // Fetch data from the URL
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(entry => {
+                            console.log(entry.time)
+                            if (entry.status !== "not-available") {
+                                const option = document.createElement("option");
+                                option.textContent = entry.time;
+                                option.className = entry.status;
+                                periodoDropdownFake.appendChild(option);
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+
+                periodoDropdownFake.insertAdjacentHTML('afterbegin', '<option selected="true" disabled>Selecciona el horario</option>');
+            }
+            
+            paypal.Buttons({
+                style: {
+                    shape: 'rect',
+                    color: 'gold',
+                    layout: 'vertical',
+                    label: 'paypal',
+                },
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            "reference_id": "{{codigo_operacion}}",  
+                            "amount": {
+                                "currency_code": "USD",
+                                "value": precio.textContent
+                            }
+                        }]
+                    });
+                },
+                onApprove: function (data) {
+                let url = `/ipn-paypal/{{codigo_operacion}}/${luzCheckbox.checked}/${fechaCorrecta}/${periodoNumber}/{{cancha.establecimiento.id}}`;
+                return fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify({
+                        orderID: data.orderID
+                    })
+                }).then(function () {
+                    location.href = `/compra-finalizada`;
+                })
+                },
+            }).render('#paypal-button-container');
+        });
+    </script>
+
     <script type="text/javascript">
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             $( "input[type=text]" ).addClass( "form-control" );
             $( "input[type=number]" ).addClass( "form-control" );
             $( "select" ).addClass( "form-control" );
@@ -222,7 +384,7 @@
 
                 dropdown.append('<option selected="true" disabled>Selecciona el horario</option>');
             };
-        });
+        });*/
     </script>
 
 {% endblock %}

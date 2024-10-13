@@ -2,17 +2,20 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import logout, authenticate, login
 from django.template import RequestContext, loader
 from custom_user.forms import EmailUserCreationForm, EmailUserChangeForm
+from django.views.decorators.cache import never_cache
 from django.views.generic.edit import UpdateView, DeleteView, CreateView, FormMixin, FormView
 from django.views.generic.detail import DetailView
+from django.http import Http404
 from django.views.generic.list import ListView
-from django.core.urlresolvers import reverse, reverse_lazy
+#from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+# from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
 from django.core import serializers
 from django.views.generic import TemplateView
+from django.shortcuts import redirect
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.conf import settings
@@ -21,12 +24,16 @@ from django.template.loader import render_to_string
 from canchas.models import *
 from canchas.forms import *
 from canchas.filters import *
-from datetime import datetime
+from canchas.choices import *
+from datetime import datetime 
 from django.views.decorators.csrf import csrf_exempt
 import json
 from collections import OrderedDict
+from decouple import config
 
 import mercadopago
+
+from canchas.utils import generate_unique_code
 
 
 DATES = {'1': 'lunes', '2': 'martes', '3': 'miercoles', '4': 'jueves', '5': 'viernes', '6':'sabado', '7':'domingo'}
@@ -486,7 +493,7 @@ class OwnerProfileCreate(CreateView):
     template_name = 'owner/owner_profile_new.html'
 
     def get_success_url(self):
-        return reverse_lazy('establecimiento_create')
+        return reverse('establecimiento_create')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -502,7 +509,7 @@ class UserProfileCreate(CreateView):
     template_name = 'registration/profile_new.html'
 
     def get_success_url(self):
-        return reverse_lazy('home')
+        return reverse('home')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -510,6 +517,34 @@ class UserProfileCreate(CreateView):
 
     def dispatch(self, *args, **kwargs):
         return super(UserProfileCreate, self).dispatch(*args, **kwargs)
+    
+def create_user_profile(request):
+    user = request.user
+
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        fecha_nacimiento = request.POST.get('fecha_nacimiento')
+        role = request.POST.get('role')
+
+        if role == 'jugador':
+            UserProfile.objects.create(
+                user=user, 
+                nombre=nombre, 
+                apellido=apellido, 
+                fecha_nacimiento=fecha_nacimiento
+            )
+            return redirect(reverse('home'))
+        elif role == 'dueno':
+            OwnerEstablecimiento.objects.create(
+                user=user,
+                nombre=nombre,
+                apellido=apellido,
+                fecha_nacimiento=fecha_nacimiento
+            )
+            return redirect(reverse('establecimiento_create'))
+
+    return render(request, 'registration/profile_new.html')
 
 
 class EstablecimientoDetail(DetailView):
@@ -539,7 +574,7 @@ class EstablecimientoDelete(DeleteView):
     template_name = 'establecimiento/establecimiento_delete.html'
 
     def get_success_url(self): 
-        return reverse_lazy('establecimiento_list')
+        return reverse('establecimiento_list')
 
 
 class EstablecimientoList(ListView):
@@ -563,7 +598,7 @@ class CanchaCreate(CreateView):
     template_name = 'cancha/cancha_new.html'
 
     def get_success_url(self): 
-        return reverse_lazy('cancha_list')
+        return reverse('cancha_list')
 
     def form_valid(self, form):
         form.instance.creador = self.request.user
@@ -589,7 +624,7 @@ class CanchaUpdate(UpdateView):
     template_name = 'cancha/cancha_update.html'
 
     def get_success_url(self): 
-        return reverse_lazy('cancha_list', kwargs={'establecimiento_id': self.kwargs['establecimiento_id']})
+        return reverse('cancha_list', kwargs={'establecimiento_id': self.kwargs['establecimiento_id']})
 
 
 class CanchaDelete(DeleteView):
@@ -597,7 +632,7 @@ class CanchaDelete(DeleteView):
     template_name = 'cancha/cancha_delete.html'
 
     def get_success_url(self): 
-        return reverse_lazy('cancha_list', kwargs={'establecimiento_id': self.kwargs['establecimiento_id']})
+        return reverse('cancha_list', kwargs={'establecimiento_id': self.kwargs['establecimiento_id']})
 
 
 class CanchaList(ListView):
@@ -626,30 +661,35 @@ class CanchaListFull(ListView):
 
 
 def cancha_list(request, *args, **kwargs):
-    cancha_list = cancha.objects.all()
+    cancha_list = Cancha.objects.all()
     cancha_filter = CanchaFilter(request.GET, queryset=cancha_list)
     return render(request, 'cancha/cancha_list.html', {'filter': cancha_filter})
 
 
 def gracias_mp(request):
     print('session gracias mp')
-    print(request.session)
     reserva_id = request.session.pop('reserva_reciente', None)
-    print(reserva_id)
     reserva = Reserva.objects.get(id=reserva_id)
     reserva.estado = 'acreditada'
     reserva.save()
     site = Site.objects.get_current()
 
     mail_txt = render_to_string('mail_mp_txt.html', {'reserva': reserva})
-    print("ENVIO MAIL")
-    msg = EmailMultiAlternatives(
-        u'Recibimos tu reserva %s - Mis Canchas /ref. #%s' % (site.name, reserva.id),
-        mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],)
-        #cc=['no-reply@miscanchas.com'])
-    msg.send()
+    try:
+        msg = EmailMultiAlternatives(
+            u'Recibimos tu reserva %s - Mis Canchas /ref. #%s' % (site.name, reserva.id),
+            mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],)
+            #cc=['no-reply@miscanchas.com'])
+        msg.send()
+    except Exception as err:
+        print(str(err))
 
     return render(request, 'gracias_mp.html', {'gracias': True, 'reserva': reserva})
+
+def compra_finalizada(request):
+    reserva = Reserva.objects.all().last()
+    return render(request, 'gracias_mp.html', {'gracias': True, 'reserva': reserva})
+    
 
 
 def redirector(reserva, *args, **kwargs):
@@ -664,36 +704,42 @@ class ReservaCreate(CreateView):
     template_name = 'reserva/reserva_new.html'
 
     def get_success_url(self):
-        #return to mis reservas 
         self.object.saldo = self.object.calcular_saldo()
-        self.object.generar_cupon_mercadopago()
+        # medio_de_pago = self.request.POST.get('role')
+        '''if medio_de_pago == 'mp':
+            self.object.generar_cupon_mercadopago()
+        elif medio_de_pago == 'paypal':
+            self.object.genera'''
         self.request.session['reserva_reciente'] = self.object.id
-        #self.object.estado = 'acreditada'
-        # Send email owner
         self.object.save()
         mail_txt = render_to_string('nueva_reserva_email_owner.html', {'reserva': self.object})
 
-        msg = EmailMultiAlternatives(
-            u' Has recibido una nueva reserva - Mis Canchas /ref. #%s' % (self.object.id),
-            mail_txt, 'no-reply@miscanchas.com', [self.object.cancha.establecimiento.owner.user],)
-        #cc=['no-reply@miscanchas.com'])
-        msg.send()
-        print("request create")
-        print(self.request.session)
-        return reverse_lazy('redirector', kwargs={'pk': self.object.id})
+        try:
+            msg = EmailMultiAlternatives(
+                u' Has recibido una nueva reserva - Mis Canchas /ref. #%s' % (self.object.id),
+                mail_txt, 'no-reply@miscanchas.com', [self.object.cancha.establecimiento.owner.user],)
+            msg.send()
+        except Exception as err:
+            print(str(err))
+
+        return reverse('redirector', kwargs={'pk': self.object.id})
 
     def get_context_data(self, **kwargs):
         context = super(ReservaCreate, self).get_context_data(**kwargs)
         cancha = Cancha.objects.get(id=self.kwargs['pk'])
         context['cancha'] = cancha
         context['ya_reservado'] = cancha.reservas.filter(confirmada=True)
+        context['paypal_client_id'] = config('PAYPAL_CLIENT_ID')
+        context['paypal_secret_key'] = config('PAYPAL_SECRET_KEY')
+        context['codigo_operacion'] = generate_unique_code()
         return context
 
     def form_valid(self, form):
-        #Add fields
-        form.instance.creador_de_reserva = self.request.user.profile
+        user_profile = UserProfile.objects.filter(user=self.request.user).first()
+        form.instance.creador_de_reserva = user_profile
         form.instance.cancha = Cancha.objects.get(id=self.kwargs['pk'])
         form.instance.pendiente = True
+        form.instance.codigo_operacion = self.request.POST.get('codigo_operacion')
         
         return super(ReservaCreate, self).form_valid(form)
 
@@ -712,7 +758,7 @@ class ReservaUpdate(UpdateView):
 
     def get_success_url(self): 
         #change redirect
-        return reverse_lazy('reservas_backoffice')
+        return reverse('reservas_backoffice')
 
 
 def aceptar_reserva(request, pk):
@@ -759,11 +805,15 @@ def cancelar_reserva(request, pk):
 
     mail_txt = render_to_string('mail_aceptar_reserva.html', {'reserva': reserva})
 
-    msg = EmailMultiAlternatives(
-        u' Actualizacion de reserva, el estado es: Cancelada - Mis Canchas /ref. #%s' % (reserva.id),
-        mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],)
-        #cc=['no-reply@miscanchas.com'])
-    msg.send()
+    try:
+        msg = EmailMultiAlternatives(
+            u' Actualizacion de reserva, el estado es: Cancelada - Mis Canchas /ref. #%s' % (reserva.id),
+            mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],)
+            #cc=['no-reply@miscanchas.com'])
+        msg.send()
+    except Exception as err:
+        print(str(err))
+
     return HttpResponseRedirect(reverse('reservas_backoffice'))
 
 
@@ -971,7 +1021,7 @@ class FavoritoDelete(DeleteView):
         return self.delete(*a, **kw)
 
     def get_success_url(self): 
-        return reverse_lazy('favorito_list')
+        return reverse('favorito_list')
 
 
 def add_fav(request, establecimiento_id, pk):
@@ -1021,7 +1071,7 @@ class FacturacionCreate(CreateView):
     template_name = 'facturacion/facturacion_create.html'
 
     def get_success_url(self):
-        return reverse_lazy('establecimiento_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse('establecimiento_detail', kwargs={'pk': self.kwargs['pk']})
 
     def get_form_kwargs(self):
         kwargs = super(FacturacionCreate, self).get_form_kwargs()
@@ -1035,7 +1085,7 @@ class FacturacionUpdate(UpdateView):
 
     def get_success_url(self): 
         #change redirect
-        return reverse_lazy('establecimiento_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse('establecimiento_detail', kwargs={'pk': self.kwargs['pk']})
 
     def get_form_kwargs(self):
         kwargs = super(FacturacionUpdate, self).get_form_kwargs()
@@ -1049,7 +1099,7 @@ class EmpleadoEstablecimientoCreate(CreateView):
     template_name = 'empleado/empleado_new_profile.html'
 
     def get_success_url(self):
-        return reverse_lazy('home_backoffice')
+        return reverse('home_backoffice')
 
     def form_valid(self, form):
         user = get_user_model().objects.get(id=self.request.session.get('employee_user'))
@@ -1100,11 +1150,12 @@ class ContactFormView(FormView):
         return super(ContactFormView, self).form_valid(form)
 
     def get_success_url(self): 
-        return reverse_lazy('email-sent')
+        return reverse('email-sent')
 
 
 def busqueda_cancha(request, *args, **kwargs):
     f = CanchaFilter(request.GET, queryset=Cancha.objects.all())
+    # f = Cancha.objects.all()
     return render(request, 'cancha/cancha_busqueda_fe.html', {'filter': f})
 
 
@@ -1133,20 +1184,66 @@ def mp_notification(request):
                 reserva = get_object_or_404(Reserva, mp_id=mp_id)
 
                 reserva.estado = 'acreditada'
-                reserva.fecha_deposito_reserva = timezone.now()
+                reserva.fecha_deposito_reserva = datetime.now()
                 reserva.deposito_reserva = reserva.costo_total
                 reserva.save()
 
                 mail_txt = render_to_string('mail_mp_txt.html', {'reserva': reserva})
 
-                msg = EmailMultiAlternatives(
-                    u'Confirmacion de Reserva %s - Mis Canchas /ref. #%s' % (site.name, reserva.id),
-                    mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],
-                    cc=['no-reply@miscanchas.com'])
-                msg.send()
+                try:
+                    msg = EmailMultiAlternatives(
+                        u'Confirmacion de Reserva %s - Mis Canchas /ref. #%s' % (site.name, reserva.id),
+                        mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],
+                        cc=['no-reply@miscanchas.com'])
+                    msg.send()
+                except Exception as err:
+                    print(str(err))
 
             return HttpResponse('ok')
-    return HttpResponseBadRequest('bad boy')
+    return Http404('bad boy')
+
+
+@never_cache
+@csrf_exempt
+def ipn_paypal(request, codigo_operacion, con_luz, fecha, periodo_index, cancha_id):
+    periodo = TIME_CHOICES[periodo_index][0]
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    cancha = Cancha.objects.get(id=cancha_id)
+    reserva = Reserva.objects.create(
+        codigo_operacion=codigo_operacion,
+        con_luz=bool(con_luz.capitalize()),
+        periodo=periodo,
+        fecha=fecha,
+        creador_de_reserva=user_profile,
+        cancha=cancha,
+        pendiente=False,
+        confirmada=True
+    )
+
+    print(request.body)
+    if reserva.is_paypal_reserva_pago(request_body=request.body):
+        try:
+            reserva.estado = 'acreditada'
+            reserva.fecha_deposito_reserva = datetime.now()
+            reserva.save()
+        except Exception as err:
+            raise Http404('Error finalizing purchase', err)
+        
+        
+        site = Site.objects.get_current()    
+        mail_txt = render_to_string('mail_mp_txt.html', {'reserva': reserva})
+        try:
+            msg = EmailMultiAlternatives(
+                u'Recibimos tu reserva %s - Mis Canchas /ref. #%s' % (site.name, reserva.id),
+                mail_txt, 'no-reply@miscanchas.com', [reserva.creador_de_reserva.user.email],)
+                #cc=['no-reply@miscanchas.com'])
+            msg.send()
+        except Exception as err:
+            print(str(err))
+
+        return render(request, 'gracias_mp.html', {'gracias': True, 'reserva': reserva})
+    else:
+        return Http404('bad boy')
 
 
 class CancelacionesUpdate(UpdateView):
@@ -1155,7 +1252,7 @@ class CancelacionesUpdate(UpdateView):
     template_name = 'reserva/cancelacion_update.html'
 
     def get_success_url(self): 
-        return reverse_lazy('reservas_canceladas')
+        return reverse('reservas_canceladas')
 
 
 class CancelacionesUpdateAdmin(UpdateView):
@@ -1164,7 +1261,7 @@ class CancelacionesUpdateAdmin(UpdateView):
     template_name = 'reserva/cancelacion_update_admin.html'
 
     def get_success_url(self): 
-        return reverse_lazy('reservas_canceladas_admin')
+        return reverse('reservas_canceladas_admin')
 
 
 

@@ -68,8 +68,8 @@
             {% load socialaccount %}
             {% providers_media_js %}
             <div class="access_social">
-                <a class="social_bt facebook" id="fb-login-btn" href="{% provider_login_url "facebook" method="js_sdk" %}">Entrar con Facebook</a>
-                <a class="social_bt google" id="google-login-btn" href="{% provider_login_url "google"  method="js_sdk" %}">Entrar con Google</a>
+                <a class="social_bt facebook" id="fb-login-btn" href="{% provider_login_url "facebook" %}?process=login" onclick="redirectToProvider(this); return false;">Entrar con Facebook</a>
+                <a class="social_bt google" id="google-login-btn" href="{% provider_login_url "google" %}?process=login" onclick="redirectToProvider(this); return false;">Entrar con Google</a>
             </div>
             
             <div class="divider"><span>O</span></div>
@@ -118,6 +118,13 @@
 
     <script type="text/javascript">
         $( "input" ).addClass( "form-control" );
+    </script>
+
+    <script type="text/javascript">
+        function redirectToProvider(element) {
+            // Redirect to the social login URL directly
+            window.location.href = element.href;
+        }
     </script>
   
 </body>

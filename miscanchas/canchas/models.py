@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+import json
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from miscanchas.settings import MEDIA_ROOT
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 import hashlib
 import datetime as dt
 from canchas.choices import *
+from .paypal_impl import GetOrder, CaptureOrder
 import mercadopago
 import uuid
 
@@ -20,7 +21,7 @@ COMISION = 0.10
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 unique=True,
-                                related_name='profile')
+                                related_name='profile', on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     fecha_nacimiento = models.DateField(blank=True, null=True, auto_now_add=False, auto_now=False)
@@ -42,9 +43,10 @@ class UserProfile(models.Model):
 class OwnerEstablecimiento(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 unique=True,
-                                related_name='dueno')
+                                related_name='dueno', on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
+    fecha_nacimiento = models.DateField(blank=True, null=True, auto_now_add=False, auto_now=False)
 
     def __str__(self):
         return str(self.user.id) + str(self.nombre) + str(self.apellido)
@@ -54,7 +56,7 @@ class EmpleadoEstablecimiento(models.Model):
     empleador = models.ForeignKey(OwnerEstablecimiento, on_delete=models.CASCADE, related_name='empleados')
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 unique=True,
-                                related_name='empleado')
+                                related_name='empleado', on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
 
@@ -84,13 +86,13 @@ class Establecimiento(models.Model):
 class Facturacion(models.Model):
     establecimiento = models.OneToOneField(Establecimiento,
                                 unique=True,
-                                related_name='facturacion')
+                                related_name='facturacion', on_delete=models.CASCADE)
     metodo_de_pago = models.CharField(max_length=100, blank=True, null=True, choices=FACTURACION)
     cbu = models.CharField(max_length=22, blank=True, null=True)
     mercadopago = models.CharField(max_length=100, blank=True, null=True)
 
 class Images(models.Model):
-    establecimiento = models.ForeignKey(Establecimiento)
+    establecimiento = models.ForeignKey(Establecimiento, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='establecimientos/',
                               verbose_name='Image', blank=True, null=True)
 
@@ -99,7 +101,7 @@ class Images(models.Model):
 
 
 class Cancha(models.Model):
-    establecimiento = models.ForeignKey(Establecimiento, related_name="canchas", blank=True, null=True)
+    establecimiento = models.ForeignKey(Establecimiento, on_delete=models.CASCADE, related_name="canchas", blank=True, null=True)
     nombre = models.CharField(max_length=100, blank=True, null=True) 
     deporte = models.CharField(max_length=100, blank=True, null=True, choices=DEPORTE)
     superficie = models.CharField(max_length=100, blank=True, null=True)
@@ -157,26 +159,24 @@ class Cancha(models.Model):
 
 
 class ImagesCancha(models.Model):
-    cancha = models.ForeignKey(Cancha, default=None)
+    cancha = models.ForeignKey(Cancha, on_delete=models.SET_NULL, default=None, null=True)
     image = models.ImageField(upload_to='canchas/',
                               verbose_name='Image', blank=True, null=True)
 
     def __str__(self):
         return str(self.cancha.deporte) + " " + str(self.id)
 
-import datetime
-
 
 class Reserva(models.Model):
-    creador_de_reserva = models.ForeignKey(UserProfile, related_name="reservas", blank=True, null=True)
-    cancha = models.ForeignKey(Cancha, related_name='reservas', blank=True, null=True)
+    creador_de_reserva = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, related_name="reservas", blank=True, null=True)
+    cancha = models.ForeignKey(Cancha, on_delete=models.SET_NULL, related_name='reservas', blank=True, null=True)
     confirmada = models.BooleanField(default=False)
     cancelada = models.BooleanField(default=False)
     pendiente = models.BooleanField(default=True)
     fecha = models.DateField(blank=True, null=True, auto_now_add=False, auto_now=False)
     #horario_inicio = models.TimeField(blank=True, null=True)
     #horario_fin = models.TimeField(blank=True, null=True)
-    periodo = models.CharField(max_length=50, choices=TIME_CHOICES)
+    periodo = models.CharField(max_length=50, choices=TIME_CHOICES, null=True)
     con_luz = models.BooleanField(default=False)
     asistio = models.BooleanField(default=False)
     mp_id = models.CharField(verbose_name=u'ID Transacción de Mercadopago', max_length=100, null=True, blank=True)
@@ -188,9 +188,13 @@ class Reserva(models.Model):
     saldo = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     cancelada_por_cliente = models.BooleanField(default=False, blank=True)
     retiro = models.CharField(max_length=20, choices=RETIRO_ESTADO, default='A liquidar')
+    codigo_operacion = models.CharField('Código operación', max_length=20, null=True)
 
     def __str__(self):
-        return "reserva " + str(self.creador_de_reserva.id) + " " + str(self.cancha.id)
+        if self.creador_de_reserva and self.cancha:
+            return "reserva " + str(self.creador_de_reserva.id) + " " + str(self.cancha.id)
+        else:
+            return "reserva"
 
     def save(self, *args, **kwargs):
         if not self.uuid:
@@ -289,10 +293,53 @@ class Reserva(models.Model):
         self.deposito_reserva = float(self.costo_deposito())
         self.save(update_fields=['mp_id', 'mp_url', 'deposito_reserva'])
 
+    def is_paypal_reserva_pago(self, request_body):
+        data = json.loads(request_body)
+        order_id = data['orderID']
+        
+        # detalle = GetOrder(movimiento).get_order(order_id)
+        detalle = GetOrder().get_order(order_id)
+        detalle_precio = float(detalle.result.purchase_units[0].amount.value)
+
+        # if float(detalle_precio) == float(movimiento.importe):
+        transaccion = CaptureOrder().capture_order(order_id, debug=False)
+
+        if (
+            transaccion.status_code in [200, 201] and 
+            transaccion.result.purchase_units[0].payments.captures[0].status in ['APPROVED', 'COMPLETED']
+        ):
+            print(f'''
+                PAGO REALIZADO CON ÉXITO:
+                Código operación: {transaccion.result.purchase_units[0].reference_id}
+                Status Code:, {transaccion.status_code}
+                Status: {transaccion.result.status}
+                Order ID:, {transaccion.result.id}
+                '''
+            )
+            return True
+        else:
+            print(f'''
+                ERROR AL COMPLETAR EL PAGO
+                Código operación: {transaccion.result.purchase_units[0].reference_id}
+                Status Code: {transaccion.status_code}
+                Status: {transaccion.result.status}
+                Order ID: {transaccion.result.id}
+                '''
+            )
+            return False
+        # else:
+        #     print(f'''
+        #         Código operación: {movimiento.codigo_operacion}
+        #         Precios incorrectos:
+        #         '''
+        #     )
+        #     return Movimiento.ESTADO_NO_FINALIZADA
+    
+
 
 class Favorito(models.Model):
-    usuario = models.ForeignKey(UserProfile, related_name='favoritos', blank=True, null=True)
-    cancha = models.ForeignKey(Cancha, related_name='favoritos', blank=True, null=True)
+    usuario = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, related_name='favoritos', blank=True, null=True)
+    cancha = models.ForeignKey(Cancha, on_delete=models.SET_NULL, related_name='favoritos', blank=True, null=True)
 
     def __str__(self):
         return str(self.id)
