@@ -73,9 +73,9 @@
                 {% load socialaccount %}
                 {% providers_media_js %}
                 <div class="access_social">
-                    <a class="social_bt facebook" id="fb-login-btn" href="{% provider_login_url "facebook" method="js_sdk" %}">Entrar con Facebook</a>
-                    <a class="social_bt google" id="google-login-btn" href="{% provider_login_url "google"  method="js_sdk" %}">Entrar con Google</a>
-                </div>
+                    <a class="social_bt facebook" id="fb-login-btn" href="{% provider_login_url "facebook" %}">Entrar con Facebook</a>
+                    <a class="social_bt google" id="google-login-btn" href="{% provider_login_url "google"  %}">Entrar con Google</a>
+                </div> 
                 
                 <div class="divider"><span>O</span></div>
                 {% if form.errors %}

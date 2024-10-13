@@ -72,7 +72,7 @@
 				<div class="col-lg-9">
 					<div class="isotope-wrapper">
 						<div class="row">
-						{% autopaginate filter.qs 20 as filter_list %}
+						
 							{% for cancha in filter_list %}  
 							<div class="col-md-6 isotope-item popular">
 								<div class="box_grid">
@@ -108,7 +108,6 @@
 								</div>
 							</div>
 							{% endfor %}
-						{% paginate %}
 						</div>
 						<!-- /row -->
 				</div>

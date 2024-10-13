@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.utils.translation import ugettext as _
+#from django.utils.translation import ugettext as _
 
 from django.contrib.auth import get_user_model
 from canchas.models import *
@@ -11,12 +11,12 @@ from django.utils.text import capfirst
 from django.core.files.images import get_image_dimensions
 from django.forms import modelformset_factory
 from canchas.choices import *
-import floppyforms as fforms
+#import floppyforms as fforms
 
 time_widget = forms.widgets.TimeInput(attrs={'class': 'time-pick'})
 valid_time_formats = ['%H:%M', '%I:%M%p', '%I:%M %p']
 
-class ContactForm(fforms.Form):
+class ContactForm(forms.Form):
 
     nombre = forms.CharField(required=True)
     email = forms.EmailField(required=True)
