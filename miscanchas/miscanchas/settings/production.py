@@ -10,10 +10,10 @@ ALLOWED_HOSTS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'miscanchas',
-        'USER': 'admin_miscanchas',
-        'PASSWORD': 'miscanchas_0517',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'miscanchas2',
+        'USER': 'matidb',
+        'PASSWORD': 'miscanchas',
         'HOST': 'localhost',
         'PORT': '',
     }
