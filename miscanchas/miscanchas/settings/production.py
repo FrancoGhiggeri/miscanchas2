@@ -4,6 +4,8 @@ DEBUG = False
 CSRF_TRUSTED_ORIGINS = [
     'https://miscanchas.com',
     'https://www.miscanchas.com',
+    'http://miscanchas.com',
+    'https://www.miscanchas.com',
 ]
 CSRF_COOKIE_SECURE = True
 ALLOWED_HOSTS = [
